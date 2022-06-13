@@ -20,6 +20,8 @@ workspace "Blueberry"
 		architecture "x86_64"
 	filter {}
 
+	startproject "JamEd"
+
 	IncludeDirs["Blueberry"] = "%{wks.location}/Blueberry/Source"
 	IncludeDirs["JamEd"] = "%{wks.location}/JamEd/Source"
 
