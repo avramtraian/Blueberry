@@ -69,3 +69,57 @@
 #define TEXT(x) BLUE_TEXT(x)
 
 using TCHAR = wchar_t;
+
+#define BLUE_ARRAY_LENGTH(Arr) (sizeof(Arr) / sizeof(Arr[0]))
+
+namespace Blueberry {
+
+	template<typename T>
+	struct RemoveReference
+	{
+		using Type = T;
+	};
+
+	template<typename T>
+	struct RemoveReference<T&>
+	{
+		using Type = T;
+	};
+
+	template<typename T>
+	struct RemoveReference<T&&>
+	{
+		using Type = T;
+	};
+
+	template<typename T>
+	using RemoveReferenceType = typename RemoveReference<T>::Type;
+
+	template<typename T>
+	struct RemoveConst
+	{
+		using Type = T;
+	};
+
+	template<typename T>
+	struct RemoveConst<const T>
+	{
+		using Type = T;
+	};
+
+	template<typename T>
+	using RemoveConstType = typename RemoveConst<T>::Type;
+
+	template<typename T>
+	constexpr RemoveReferenceType<T>&& Move(T&& Object) noexcept
+	{
+		return static_cast<RemoveReferenceType<T>&&>(Object);
+	}
+
+	template<typename T>
+	constexpr T&& Forward(RemoveReferenceType<T>& Object) noexcept
+	{
+		return static_cast<T&&>(Object);
+	}
+
+}

@@ -18,6 +18,9 @@ namespace Blueberry {
 
 	private:
 		static Application* s_Instance;
+
+	private:
+		bool m_IsRunning = false;
 	};
 
 	Application* CreateApplication();

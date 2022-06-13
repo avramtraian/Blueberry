@@ -1,6 +1,9 @@
 #pragma once
 
+#include "ExitCode.h"
+
 #include "Core/Application.h"
+#include "Core/Platform/Platform.h"
 
 namespace Blueberry {
 	
@@ -8,7 +11,10 @@ namespace Blueberry {
 
 	inline int32_t BlueberryMain(TCHAR** cmd_params, uint32_t cmd_params_num)
 	{
-		int32_t return_code = 0;
+		if (!Platform::Initialize())
+			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
+
+		int32_t return_code = BLUE_EXIT_CODE_SUCCESS;
 
 		do
 		{
@@ -22,6 +28,8 @@ namespace Blueberry {
 			delete application;
 		}
 		while (s_RestartApplication);
+
+		Platform::Shutdown();
 
 		return return_code;
 	}
