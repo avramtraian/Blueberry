@@ -21,7 +21,7 @@ The source code is organized into multiple branches:
 1.   Install a Git client, such as [***Fork***](https://git-fork.com/) or [***Github for Windows***](https://desktop.github.com/), then ***fork*** and ***clone*** this repository. Or, you can use the command-line instead, with the following command:
 ```
 git clone --recursive -b release https://github.com/avramtraian/Blueberry.git {your installation path}
-``
+```
 
       Either one you choose, make sure to download all the submodules.
       
