@@ -1,2 +1,13 @@
+# Blueberry Engine Binaries & Intermediate
+Binaries/
+Intermediate/
+
+# Allow Third Party Binaries
+!JamEd/ThirdParty/premake/Binaries
+
 # Visual Studio Project Files
 .vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
