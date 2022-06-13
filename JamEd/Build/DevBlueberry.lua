@@ -9,6 +9,10 @@ project "Blueberry"
 	objdir "%{wks.location}/Intermediate/Binaries/%{cfg.buildcfg}/%{prj.name}"
 	targetname "Blueberry"
 
+	pchheader "blubpch.h"
+	-- NOTE (Avr): Token expansion seems broken when used in 'pchsource'
+	pchsource "../../Blueberry/Source/blubpch.cpp"
+
 	rtti "Off"
 	exceptionhandling "Off"
 
@@ -28,6 +32,11 @@ project "Blueberry"
 	defines
 	{
 		"BLUE_BUILD_DLL"
+	}
+
+	forceincludes
+	{
+		"blubpch.h"
 	}
 
 	filter "platforms:Win64"
