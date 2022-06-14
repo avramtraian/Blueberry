@@ -3,6 +3,8 @@
 #include "Core/Base.h"
 #include "Core/Memory/Memory.h"
 
+#include "ArrayIterator.h"
+
 #include <initializer_list>
 
 namespace Blueberry {
@@ -10,6 +12,12 @@ namespace Blueberry {
 	template<typename ElementType, typename AllocatorType = HeapAllocator>
 	class Vector
 	{
+	public:
+		using Iterator             = ArrayIterator<ElementType>;
+		using ConstIterator        = ArrayIterator<const ElementType>;
+		using ReverseIterator      = ArrayIterator<ElementType>;
+		using ReverseConstIterator = ArrayIterator<const ElementType>;
+
 	public:
 		Vector()
 			: m_Data(nullptr)
@@ -329,6 +337,12 @@ namespace Blueberry {
 		void Pop()
 		{
 			m_Data[m_Size - 1].~ElementType();
+			m_Size--;
+		}
+
+		void Remove(SizeT location)
+		{
+			ShiftElementsLeft(location, 1);
 			m_Size--;
 		}
 
@@ -686,6 +700,9 @@ namespace Blueberry {
 
 		void ShiftElementsLeft(SizeT starting_index, SizeT offset)
 		{
+			if (m_Size == starting_index)
+				return;
+
 			for (SizeT index = starting_index - offset; index < m_Size - offset - 1; index++)
 			{
 				m_Data[index] = Blueberry::Move(m_Data[index + offset]);
@@ -695,6 +712,23 @@ namespace Blueberry {
 				m_Data[index].~ElementType();
 			}
 		}
+
+	public:
+		Iterator begin() { return Iterator(m_Data); }
+
+		Iterator end() { return Iterator(m_Data + m_Size); }
+
+		ConstIterator begin() const { return ConstIterator(m_Data); }
+
+		ConstIterator end() const { return ConstIterator(m_Data + m_Size); }
+
+		ReverseIterator rbegin() { return ReverseIterator(m_Data + m_Size - 1); }
+
+		ReverseIterator rend() { return ReverseIterator(m_Data - 1); }
+
+		ReverseConstIterator rbegin() const { return ReverseConstIterator(m_Data + m_Size - 1); }
+
+		ReverseConstIterator rend() const { return ReverseConstIterator(m_Data - 1); }
 
 	private:
 		ElementType* m_Data;

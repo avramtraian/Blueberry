@@ -46,6 +46,8 @@ namespace Blueberry {
 		Window& operator=(Window&&) noexcept = delete;
 
 	public:
+		WindowData& GetData() { return m_Data; }
+
 		const WindowData& GetData() const { return m_Data; }
 
 		void* GetNativeHandle() const { return m_NativeHandle; }

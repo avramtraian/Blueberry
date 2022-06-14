@@ -1,6 +1,7 @@
 #if BLUE_PLATFORM_WINDOWS
 
 #include "Core/Window.h"
+#include "Core/Application.h"
 
 #include "WindowsHeaders.h"
 
@@ -11,9 +12,11 @@ namespace Blueberry {
 		return new Window(data);
 	}
 
-	static LRESULT WindowProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT BlueberryWindowProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 	namespace Utils {
+
+		static Vector<Pair<HWND, Window*>> s_RegisteredWindows;
 
 		constexpr const TCHAR* BLUE_WINDOW_CLASS_NAME = TEXT("__Blueberry_Window_Class__");
 
@@ -22,7 +25,7 @@ namespace Blueberry {
 			WNDCLASSEX wnd_class = {};
 
 			wnd_class.hInstance   = GetModuleHandle(NULL);
-			wnd_class.lpfnWndProc = WindowProcedure;
+			wnd_class.lpfnWndProc = Blueberry::BlueberryWindowProcedure;
 			wnd_class.hIcon       = NULL;
 			wnd_class.hIconSm     = NULL;
 
@@ -74,6 +77,18 @@ namespace Blueberry {
 			}
 		}
 
+		static Window* FindWindowByHWND(HWND window_hwnd)
+		{
+			auto& windows = Application::Get()->GetWindows();
+			for (auto& window : windows)
+			{
+				if (window->GetNativeHandle() == (void*)window_hwnd)
+					return window;
+			}
+
+			return nullptr;
+		}
+
 	}
 
 	Window::Window(const WindowData& data)
@@ -121,6 +136,8 @@ namespace Blueberry {
 		}
 
 		m_NativeHandle = window_hwnd;
+		Application::Get()->AddWindow(this);
+
 		ShowWindow(window_hwnd, show_mode);
 	}
 
@@ -164,12 +181,36 @@ namespace Blueberry {
 		}
 	}
 
-	LRESULT WindowProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+	LRESULT BlueberryWindowProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 	{
 		switch (Msg)
 		{
+			case WM_SIZE:
+			{
+				UINT width  = LOWORD(lParam);
+				UINT height = HIWORD(lParam);
+
+				Window* window = Utils::FindWindowByHWND(hWnd);
+				window->GetData().Width  = (uint32_t)width;
+				window->GetData().Height = (uint32_t)height;
+
+				return 0;
+			}
+			case WM_MOVE:
+			{
+				POINTS pos = MAKEPOINTS(lParam);
+
+				Window* window = Utils::FindWindowByHWND(hWnd);
+				window->GetData().PositionX = (int32_t)pos.x;
+				window->GetData().PositionY = (int32_t)pos.y;
+
+				return 0;
+			}
 			case WM_CLOSE:
 			{
+				Window* window = Utils::FindWindowByHWND(hWnd);
+				window->ScheduleClose();
+
 				return 0;
 			}
 		}
