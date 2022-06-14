@@ -24,6 +24,11 @@ namespace Blueberry {
 		static void Shutdown();
 
 	public:
+		static void* MemoryAllocate(SizeT block_size);
+
+		static void MemoryFree(void* memory_block);
+
+	public:
 		static void TimeGetLocalTime(SystemTime& out_local_time);
 
 	public:

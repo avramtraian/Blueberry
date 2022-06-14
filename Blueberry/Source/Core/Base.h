@@ -27,7 +27,7 @@
 #endif
 
 #if BLUE_COMPILER_MSVC
-	#define BLUE_FORCEINLINE() __forceinline
+	#define BLUE_FORCEINLINE   __forceinline
 	#define BLUE_DEBUGBREAK()  __debugbreak()
 
 	#define BLUE_FUNCTION      __FUNCTION__
@@ -68,9 +68,17 @@
 #define BLUE_TEXT(x) L##x
 #define TEXT(x) BLUE_TEXT(x)
 
-using TCHAR = wchar_t;
-
 #define BLUE_ARRAY_LENGTH(Arr) (sizeof(Arr) / sizeof(Arr[0]))
+
+namespace Blueberry {
+
+	using TCHAR = wchar_t;
+
+	using SizeT = uint64_t;
+
+	constexpr SizeT BLUE_INVALID_SIZE = 0xffffffffffffffff;
+
+}
 
 namespace Blueberry {
 

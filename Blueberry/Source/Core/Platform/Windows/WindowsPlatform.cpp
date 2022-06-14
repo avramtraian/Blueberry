@@ -5,7 +5,6 @@
 #include "WindowsHeaders.h"
 
 #include <cstdlib>
-#include <new>
 
 namespace Blueberry {
 
@@ -52,6 +51,16 @@ namespace Blueberry {
 		s_PlatformData->~WindowsPlatformData();
 		free(s_PlatformData);
 		s_PlatformData = nullptr;
+	}
+
+	void* Platform::MemoryAllocate(SizeT block_size)
+	{
+		return malloc((size_t)block_size);
+	}
+
+	void Platform::MemoryFree(void* memory_block)
+	{
+		free(memory_block);
 	}
 
 	void Platform::TimeGetLocalTime(SystemTime& out_local_time)
