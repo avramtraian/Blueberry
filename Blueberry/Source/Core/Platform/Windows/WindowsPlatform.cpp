@@ -99,7 +99,7 @@ namespace Blueberry {
 		if (!s_PlatformData->ConsoleIsAttached)
 			return;
 
-		if (WriteConsole(s_PlatformData->ConsoleHandle, message.CStr(), (DWORD)message.Size(), NULL, NULL) == 0)
+		if (WriteConsole(s_PlatformData->ConsoleHandle, message.CStr(), (DWORD)message.Length(), NULL, NULL) == 0)
 		{
 			// TODO (Avr): Assert
 		}

@@ -12,9 +12,9 @@ namespace Blueberry {
 		static void Shutdown();
 
 	public:
-		void Copy(void* destination, const void* source, SizeT copy_size);
-		void Set(void* destination, int value, SizeT set_size);
-		void Zero(void* destination, SizeT zero_size);
+		static void Copy(void* destination, const void* source, SizeT copy_size);
+		static void Set(void* destination, int value, SizeT set_size);
+		static void Zero(void* destination, SizeT zero_size);
 
 	public:
 		static void* AllocateRaw(SizeT block_size);

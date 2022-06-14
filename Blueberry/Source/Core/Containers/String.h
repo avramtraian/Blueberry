@@ -2,6 +2,8 @@
 
 #include "Core/Base.h"
 
+#include "Vector.h"
+
 namespace Blueberry { namespace StringCalls_TCHAR {
 
 	BLUEBERRY_API BLUE_NODISCARD size_t Length(const TCHAR* string);
@@ -12,50 +14,80 @@ namespace Blueberry { namespace StringCalls_TCHAR {
 
 namespace Blueberry{
 
+	// Forward declaration
+	class String;
+
 	class BLUEBERRY_API StringView
 	{
 	public:
-		StringView(const StringView& other)
-			: m_Data(other.m_Data)
-			, m_Size(other.m_Size)
-		{}
-		
-		StringView(const TCHAR* string)
-			: m_Data(string)
-			, m_Size(StringCalls_TCHAR::Length(string))
-		{}
+		StringView(const StringView& other);
 
-		StringView(const TCHAR* string, size_t string_length)
-			: m_Data(string)
-			, m_Size(string_length)
-		{}
+		StringView(const String& string);
+		
+		StringView(const TCHAR* string);
+
+		StringView(const TCHAR* string, SizeT string_length);
 
 	public:
-		StringView& operator=(const StringView& other)
-		{
-			m_Data = other.m_Data;
-			m_Size = other.m_Size;
-			return *this;
-		}
+		StringView& operator=(const StringView& other);
 
-		StringView& operator=(const TCHAR* string)
-		{
+		StringView& operator=(const String& string);
 
-			m_Data = string;
-			m_Size = StringCalls_TCHAR::Length(string);
-			return *this;
-		}
+		StringView& operator=(const TCHAR* string);
 
 	public:
 		const TCHAR* Data() const { return m_Data; }
 
 		const TCHAR* CStr() const { return m_Data; }
 
-		size_t Size() const { return m_Size; }
+		SizeT Length() const { return m_Length; }
+
+		bool IsEmpty() const { return (m_Length == 0); }
 
 	private:
 		const TCHAR* m_Data;
-		size_t m_Size;
+		SizeT m_Length;
+	};
+
+	class BLUEBERRY_API String
+	{
+	public:
+		String();
+
+		String(const String& other);
+
+		String(String&& other) noexcept;
+
+		String(StringView string_view);
+
+		String(const TCHAR* string);
+
+		String(const TCHAR* string, SizeT string_length);
+
+		~String();
+
+	public:
+		String& operator=(const String& other);
+
+		String& operator=(String&& other) noexcept;
+
+		String& operator=(StringView string_view);
+
+		String& operator=(const TCHAR* string);
+
+	public:
+		TCHAR* Data() const { return m_Data.Data(); }
+
+		const TCHAR* CStr() const { return m_Data.Data(); }
+
+		SizeT Length() const { return (m_Data.Size() - 1); }
+
+		SizeT Capacity() const { return (m_Data.Capacity() - 1); }
+
+		bool IsEmpty() const { return (Length() == 1); }
+
+	private:
+		Vector<TCHAR, HeapAllocator> m_Data;
 	};
 
 }

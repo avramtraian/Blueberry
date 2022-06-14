@@ -3,6 +3,8 @@
 #include "Core/Base.h"
 #include "Core/Memory/Memory.h"
 
+#include <initializer_list>
+
 namespace Blueberry {
 	
 	template<typename ElementType, typename AllocatorType = HeapAllocator>
@@ -330,14 +332,6 @@ namespace Blueberry {
 			m_Size--;
 		}
 
-		void Clear()
-		{
-			for (SizeT index = 0; index < m_Size; index++)
-				m_Data[index].~ElementType();
-
-			m_Size = 0;
-		}
-
 		ElementType& Front()
 		{
 			return m_Data[0];
@@ -477,6 +471,68 @@ namespace Blueberry {
 			ShiftElementsRight(location, num);
 
 			m_Size += num;
+		}
+
+	public:
+		void SetSize(SizeT new_size)
+		{
+			if (new_size == m_Size)
+				return;
+
+			if (new_size > m_Capacity)
+				ReAllocate(NextCapacity(new_size));
+
+			for (SizeT index = m_Size; index < new_size; index++)
+				new (m_Data + index) ElementType();
+
+			for (SizeT index = new_size; index < m_Size; index++)
+				m_Data[index].~ElementType();
+
+			m_Size = new_size;
+		}
+
+		void SetSizeZeroed(SizeT new_size)
+		{
+			if (new_size == m_Size)
+				return;
+
+			if (new_size > m_Capacity)
+				ReAllocate(NextCapacity(new_size));
+
+			if (new_size > m_Size)
+				Memory::Zero(m_Data + m_Size, new_size - m_Size);
+
+			for (SizeT index = new_size; index < m_Size; index++)
+				m_Data[index].~ElementType();
+
+			m_Size = new_size;
+		}
+
+		void SetSizeUninitialized(SizeT new_size)
+		{
+			if (new_size == m_Size)
+				return;
+
+			if (new_size > m_Capacity)
+				ReAllocate(NextCapacity(new_size));
+
+			for (SizeT index = new_size; index < m_Size; index++)
+				m_Data[index].~ElementType();
+
+			m_Size = new_size;
+		}
+
+		void SetSizeInternal(SizeT new_size)
+		{
+			m_Size = new_size;
+		}
+
+		void Clear()
+		{
+			for (SizeT index = 0; index < m_Size; index++)
+				m_Data[index].~ElementType();
+
+			m_Size = 0;
 		}
 
 	private:

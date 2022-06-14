@@ -34,16 +34,12 @@ namespace Blueberry {
 		if (!Logger::Initialize())
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
 
-		float delta_time = 0.0f;
-
-		// Sets the 'm_IsRunning' flag to true
 		m_IsRunning = true;
 
 		while (m_IsRunning)
 		{
 		}
 
-		// Ensure that 'm_IsRunning' is set to false
 		m_IsRunning = false;
 
 		Logger::Shutdown();
