@@ -3,6 +3,10 @@
 #include "Core/Window.h"
 #include "Core/Application.h"
 
+#include "Core/Events/WindowEvents.h"
+#include "Core/Events/MouseEvents.h"
+#include "Core/Events/KeyboardEvents.h"
+
 #include "WindowsHeaders.h"
 
 namespace Blueberry {
@@ -158,6 +162,9 @@ namespace Blueberry {
 	{
 		m_Data.Title = title;
 		SetWindowText((HWND)m_NativeHandle, title.CStr());
+
+		WindowTitleChangedEvent e(m_Data.Title);
+		m_Data.EventCallback(this, e);
 	}
 
 	void Window::SetSize(uint32_t width, uint32_t height)
@@ -194,17 +201,127 @@ namespace Blueberry {
 	{
 		switch (Msg)
 		{
-			case WM_SIZE:
+			case WM_MOUSEMOVE:
 			{
-				UINT width  = LOWORD(lParam);
-				UINT height = HIWORD(lParam);
+				POINTS pos = MAKEPOINTS(lParam);
 
 				Window* window = Utils::FindWindowByHWND(hWnd);
-				window->GetData().Width  = (uint32_t)width;
-				window->GetData().Height = (uint32_t)height;
+
+				MouseMovedEvent e((int32_t)pos.x, (int32_t)pos.y);
+				window->GetData().EventCallback(window, e);
 
 				return 0;
 			}
+
+			case WM_LBUTTONDOWN:
+			{
+				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				MouseButtonPressedEvent e(MouseButton::Left);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+			case WM_LBUTTONUP:
+			{
+				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				MouseButtonReleasedEvent e(MouseButton::Left);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+
+			case WM_RBUTTONDOWN:
+			{
+				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				MouseButtonPressedEvent e(MouseButton::Right);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+			case WM_RBUTTONUP:
+			{
+				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				MouseButtonReleasedEvent e(MouseButton::Right);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+
+			case WM_MBUTTONDOWN:
+			{
+				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				MouseButtonPressedEvent e(MouseButton::Middle);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+			case WM_MBUTTONUP:
+			{
+				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				MouseButtonReleasedEvent e(MouseButton::Middle);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+
+			case WM_MOUSEWHEEL:
+			{
+				auto delta = GET_WHEEL_DELTA_WPARAM(wParam);
+
+				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				MouseWheelScrolledEvent e(delta > 0 ? 1 : -1);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+
+			case WM_KEYDOWN:
+			case WM_SYSKEYDOWN:
+			{
+				Key key = (Key)wParam;
+
+				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				KeyPressedEvent e(key);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+			case WM_KEYUP:
+			case WM_SYSKEYUP:
+			{
+				Key key = (Key)wParam;
+
+				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				KeyReleasedEvent e(key);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+
+			case WM_SIZE:
+			{
+				uint32_t width  = (uint32_t)(LOWORD(lParam));
+				uint32_t height = (uint32_t)(HIWORD(lParam));
+
+				Window* window = Utils::FindWindowByHWND(hWnd);
+				window->GetData().Width  = width;
+				window->GetData().Height = height;
+				
+				WindowResizedEvent e(width, height);
+				window->GetData().EventCallback(window, e);
+
+				return 0;
+			}
+
 			case WM_MOVE:
 			{
 				POINTS pos = MAKEPOINTS(lParam);
@@ -213,12 +330,19 @@ namespace Blueberry {
 				window->GetData().PositionX = (int32_t)pos.x;
 				window->GetData().PositionY = (int32_t)pos.y;
 
+				WindowMovedEvent e((int32_t)pos.x, (int32_t)pos.y);
+				window->GetData().EventCallback(window, e);
+
 				return 0;
 			}
+
 			case WM_CLOSE:
 			{
 				Window* window = Utils::FindWindowByHWND(hWnd);
 				window->ScheduleClose();
+
+				WindowClosedEvent e;
+				window->GetData().EventCallback(window, e);
 
 				return 0;
 			}

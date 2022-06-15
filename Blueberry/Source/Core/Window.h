@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Base.h"
+#include "Events/Event.h"
 
 namespace Blueberry {
 	
@@ -14,15 +15,18 @@ namespace Blueberry {
 	};
 	using WindowFlags = uint16_t;
 
+	using PFN_WindowCallaback = void(*)(const class Window*, Event&);
+
 	struct WindowData
 	{
-		uint32_t    Width     = 400;
-		uint32_t    Height    = 400;
-		int32_t     PositionX = 100;
-		int32_t     PositionY = 100;
-		String      Title     = TEXT("Blueberry Window");
-		bool        IsPrimary = false;
-		WindowFlags Flags     = BLUE_WINDOW_FLAG_NONE;
+		uint32_t            Width         = 400;
+		uint32_t            Height        = 400;
+		int32_t             PositionX     = 100;
+		int32_t             PositionY     = 100;
+		String              Title         = TEXT("Blueberry Window");
+		bool                IsPrimary     = false;
+		WindowFlags         Flags         = BLUE_WINDOW_FLAG_NONE;
+		PFN_WindowCallaback EventCallback = nullptr;
 	};
 
 	enum WindowErrorCodesEnum : uint16_t

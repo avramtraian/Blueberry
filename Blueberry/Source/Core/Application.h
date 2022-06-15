@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 
 #include "Window.h"
+#include "Events/Event.h"
 
 namespace Blueberry {
 
@@ -21,6 +22,8 @@ namespace Blueberry {
 
 	public:
 		static Application* Get() { return s_Instance; }
+
+		static void OnEvent(const Window* window, Event& e);
 
 	public:
 		int32_t Run(TCHAR** cmd_params, uint32_t cmd_params_num);

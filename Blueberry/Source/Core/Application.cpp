@@ -7,6 +7,10 @@
 
 #include "Time.h"
 
+#include "Events/WindowEvents.h"
+#include "Events/MouseEvents.h"
+#include "Events/KeyboardEvents.h"
+
 namespace Blueberry {
 
 	Blueberry::Application* Application::s_Instance = nullptr;
@@ -30,6 +34,11 @@ namespace Blueberry {
 		}
 
 		s_Instance = nullptr;
+	}
+
+	void Application::OnEvent(const Window* window, Event& e)
+	{
+		EventDispatcher dispatcher(e);
 	}
 
 	int32_t Application::Run(TCHAR** cmd_params, uint32_t cmd_params_num)
