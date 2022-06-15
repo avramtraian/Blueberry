@@ -52,6 +52,9 @@ namespace Blueberry {
 		TimePoint now = Time::GetTime();
 		TimePoint last_tick = now;
 
+		for (Layer* layer : m_Layers)
+			layer->OnAttach();
+
 		while (m_IsRunning)
 		{
 			TimeStep ts = now - last_tick;
@@ -60,10 +63,11 @@ namespace Blueberry {
 
 			float delta_time = ts.Seconds();
 
-			for (auto& window : m_Windows)
-			{
+			for (Window* window : m_Windows)
 				window->MessageLoop();
-			}
+
+			for (Layer* layer : m_Layers)
+				layer->Tick(delta_time);
 
 			Input::OnUpdate();
 
@@ -89,12 +93,23 @@ namespace Blueberry {
 
 		m_IsRunning = false;
 
+		for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); it--)
+			(*it)->OnDetach();
+
+		for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); it--)
+			delete (*it);
+
 		m_Windows.Clear();
 
 		Input::Shutdown();
 		Logger::Shutdown();
 
 		return BLUE_EXIT_CODE_SUCCESS;
+	}
+
+	void Application::AddLayer(Layer* layer)
+	{
+		m_Layers.Add(layer);
 	}
 
 	void Application::AddWindow(Window* window)
@@ -147,6 +162,10 @@ namespace Blueberry {
 				Input::SetMouseWheelDelta(e.GetDelta());
 				return false;
 			});
+
+		Vector<Layer*>& layers = Application::Get()->m_Layers;
+		for (auto it = layers.rbegin(); it != layers.rend(); it--)
+			(*it)->OnEvent(window, e);
 	}
 
 }

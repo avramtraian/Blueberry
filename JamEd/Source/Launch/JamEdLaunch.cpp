@@ -1,4 +1,5 @@
 #include "Launch/Launch.h"
+#include "Editor/EditorLayer.h"
 
 namespace Blueberry {
 
@@ -8,6 +9,7 @@ namespace Blueberry {
 		JamEdApplication(const ApplicationInfo& info)
 			: Application(info)
 		{
+			AddLayer(new EditorLayer());
 		}
 
 		virtual ~JamEdApplication() override

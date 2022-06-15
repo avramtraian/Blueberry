@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 
+#include "Layer.h"
 #include "Window.h"
 #include "Events/Event.h"
 
@@ -28,6 +29,8 @@ namespace Blueberry {
 	public:
 		int32_t Run(TCHAR** cmd_params, uint32_t cmd_params_num);
 
+		void AddLayer(Layer* layer);
+
 		const Vector<Window*>& GetWindows() const { return m_Windows; }
 
 		void AddWindow(Window* window);
@@ -39,6 +42,8 @@ namespace Blueberry {
 		ApplicationInfo m_Info;
 
 		bool m_IsRunning = false;
+
+		Vector<Layer*> m_Layers;
 
 		Vector<Window*> m_Windows;
 	};
