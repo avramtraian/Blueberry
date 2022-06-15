@@ -7,6 +7,7 @@
 
 #include "Memory.h"
 
+#include "Containers/Array.h"
 #include "Containers/Vector.h"
 #include "Containers/String.h"
 #include "Containers/Pair.h"

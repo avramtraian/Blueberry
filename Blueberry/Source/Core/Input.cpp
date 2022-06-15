@@ -19,15 +19,12 @@ namespace Blueberry {
 
 	struct InputData
 	{
-		KeyState KeyStates[256]  = {};
-
-		int32_t  MouseX          = 0;
-		int32_t  MouseY          = 0;
-
-		int32_t  LastTickMouseX  = 0;
-		int32_t  LastTickMouseY  = 0;
-
-		double   MouseWheelDelta = 0.0;
+		Array<KeyState, 256> KeyStates       = {};
+		int32_t              MouseX          = 0;
+		int32_t              MouseY          = 0;
+		int32_t              LastTickMouseX  = 0;
+		int32_t              LastTickMouseY  = 0;
+		double               MouseWheelDelta = 0.0;
 	};
 	static InputData* s_InputData = nullptr;
 
@@ -135,7 +132,7 @@ namespace Blueberry {
 	{
 		s_InputData->MouseWheelDelta = 0.0;
 
-		Memory::Set(s_InputData->KeyStates, BLUE_KEY_STATE_None, sizeof(s_InputData->KeyStates));
+		Memory::Set(s_InputData->KeyStates.Data(), BLUE_KEY_STATE_None, sizeof(s_InputData->KeyStates));
 	}
 
 	void Input::SetKeyPressed(Key key)
