@@ -1,6 +1,6 @@
 #include "Memory.h"
 
-#include "Core/Platform/Platform.h"
+#include "Core/Platform.h"
 
 namespace Blueberry {
 

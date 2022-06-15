@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Base.h"
-#include "Core/Memory/Memory.h"
+#include "Core/Memory.h"
 
 #include "ArrayIterator.h"
 

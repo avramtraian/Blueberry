@@ -1,6 +1,6 @@
 #if BLUE_PLATFORM_WINDOWS
 
-#include "Core/Platform/Platform.h"
+#include "Core/Platform.h"
 
 #include "WindowsHeaders.h"
 

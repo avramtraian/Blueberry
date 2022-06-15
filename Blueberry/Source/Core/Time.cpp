@@ -1,6 +1,6 @@
 #include "Time.h"
 
-#include "Platform/Platform.h"
+#include "Platform.h"
 
 namespace Blueberry {
 

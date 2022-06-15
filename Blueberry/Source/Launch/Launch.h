@@ -3,7 +3,7 @@
 #include "ExitCode.h"
 
 #include "Core/Application.h"
-#include "Core/Platform/Platform.h"
+#include "Core/Platform.h"
 
 namespace Blueberry {
 	

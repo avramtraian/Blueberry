@@ -3,7 +3,7 @@
 #include "Launch/ExitCode.h"
 
 #include "Log.h"
-#include "Platform/Platform.h"
+#include "Platform.h"
 
 #include "Time.h"
 
