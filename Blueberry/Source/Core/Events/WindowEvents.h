@@ -23,6 +23,17 @@ namespace Blueberry {
 		uint32_t m_Width, m_Height;
 	};
 
+	class BLUEBERRY_API WindowMinimizedEvent : public Event
+	{
+	public:
+		static EventType GetStaticType() { return EventType::WindowMinimized; }
+
+	public:
+		WindowMinimizedEvent()
+			: Event(GetStaticType())
+		{}
+	};
+
 	class BLUEBERRY_API WindowMovedEvent : public Event
 	{
 	public:

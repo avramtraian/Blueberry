@@ -313,6 +313,14 @@ namespace Blueberry {
 				uint32_t height = (uint32_t)(HIWORD(lParam));
 
 				Window* window = Utils::FindWindowByHWND(hWnd);
+
+				if (width == 0 || height == 0)
+				{
+					WindowMinimizedEvent e;
+					window->GetData().EventCallback(window, e);
+					return 0;
+				}
+
 				window->GetData().Width  = width;
 				window->GetData().Height = height;
 				

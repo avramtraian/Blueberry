@@ -119,15 +119,15 @@ namespace Blueberry {
 	using RemoveConstType = typename RemoveConst<T>::Type;
 
 	template<typename T>
-	constexpr RemoveReferenceType<T>&& Move(T&& Object) noexcept
+	constexpr RemoveReferenceType<T>&& Move(T&& object) noexcept
 	{
-		return static_cast<RemoveReferenceType<T>&&>(Object);
+		return static_cast<RemoveReferenceType<T>&&>(object);
 	}
 
 	template<typename T>
-	constexpr T&& Forward(RemoveReferenceType<T>& Object) noexcept
+	constexpr T&& Forward(RemoveReferenceType<T>& object) noexcept
 	{
-		return static_cast<T&&>(Object);
+		return static_cast<T&&>(object);
 	}
 
 }

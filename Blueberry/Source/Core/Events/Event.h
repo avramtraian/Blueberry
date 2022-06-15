@@ -8,8 +8,9 @@ namespace Blueberry {
 	{
 		None = 0,
 
-		WindowMoved,
 		WindowResized,
+		WindowMoved,
+		WindowMinimized,
 		WindowTitleChanged,
 		WindowClosed,
 
@@ -42,19 +43,21 @@ namespace Blueberry {
 	class EventDispatcher
 	{
 	public:
-		EventDispatcher(Event& e)
+		EventDispatcher(Event& e, const class Window* window)
 			: m_Event(e)
+			, m_Window(window)
 		{}
 
 		template<typename T>
-		void Dispatch(bool(*pfn_event_callback)(const T&))
+		void Dispatch(bool(*pfn_event_callback)(const class Window*, const T&))
 		{
 			if (T::GetStaticType() == m_Event.GetType() && !m_Event.m_Handled)
-				m_Event.m_Handled = pfn_event_callback(*(static_cast<const T*>(&m_Event)));
+				m_Event.m_Handled = pfn_event_callback(m_Window , *(static_cast<const T*>(&m_Event)));
 		}
 
 	private:
 		Event& m_Event;
+		const class Window* m_Window;
 	};
 
 }
