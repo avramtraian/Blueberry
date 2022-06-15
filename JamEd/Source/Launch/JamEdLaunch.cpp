@@ -5,7 +5,8 @@ namespace Blueberry {
 	class JamEdApplication : public Application
 	{
 	public:
-		JamEdApplication()
+		JamEdApplication(const ApplicationInfo& info)
+			: Application(info)
 		{
 		}
 
@@ -16,7 +17,13 @@ namespace Blueberry {
 
 	Application* CreateApplication()
 	{
-		return new JamEdApplication();
+		ApplicationInfo info;
+		info.ApplicationName = TEXT("Blueberry Editor");
+		info.PrimaryWindow.Title     = TEXT("JamEd -- Windows -- 64-bit -- Renderer: Vulkan -- Untitled*");
+		info.PrimaryWindow.IsPrimary = true;
+		info.PrimaryWindow.Flags     = BLUE_WINDOW_FLAG_MAXIMIZED;
+
+		return new JamEdApplication(info);
 	}
 
 }

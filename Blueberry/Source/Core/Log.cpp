@@ -74,7 +74,7 @@ namespace Blueberry {
 		};
 
 		SystemTime time;
-		Platform::TimeGetLocalTime(time);
+		Platform::GetLocalSystemTime(time);
 
 		static TCHAR buffer[8192] = {};
 		auto written = std::format_to_n(
@@ -84,8 +84,8 @@ namespace Blueberry {
 			verbosity_names[(uint8_t)verbosity],
 			message.CStr());
 
-		Platform::ConsoleSetFlags(console_flags[(uint8_t)verbosity]);
-		Platform::ConsoleWrite({ buffer, (size_t)written.size });
+		Platform::SetConsoleFlags(console_flags[(uint8_t)verbosity]);
+		Platform::WriteToConsole({ buffer, (size_t)written.size });
 	}
 
 }

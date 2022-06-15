@@ -15,7 +15,7 @@ namespace Blueberry {
 		if (s_MemoryData)
 			return false;
 
-		s_MemoryData = (MemoryData*)Platform::MemoryAllocate(sizeof(MemoryData));
+		s_MemoryData = (MemoryData*)Platform::Allocate(sizeof(MemoryData));
 		if (!s_MemoryData)
 			return false;
 		new (s_MemoryData) MemoryData();
@@ -29,7 +29,7 @@ namespace Blueberry {
 			return;
 
 		s_MemoryData->~MemoryData();
-		Platform::MemoryFree(s_MemoryData);
+		Platform::Free(s_MemoryData);
 		s_MemoryData = nullptr;
 	}
 
@@ -53,7 +53,7 @@ namespace Blueberry {
 		if (block_size == 0)
 			return nullptr;
 
-		return Platform::MemoryAllocate(block_size);
+		return Platform::Allocate(block_size);
 	}
 
 	void* Memory::Allocate(SizeT block_size)
@@ -69,7 +69,7 @@ namespace Blueberry {
 		if (memory_block == nullptr)
 			return;
 
-		Platform::MemoryFree(memory_block);
+		Platform::Free(memory_block);
 	}
 
 	void Memory::Free(void* memory_block)

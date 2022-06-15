@@ -10,9 +10,12 @@ namespace Blueberry {
 
 	struct WindowsPlatformData
 	{
-		HANDLE   ConsoleHandle     = INVALID_HANDLE_VALUE;
-		bool     ConsoleIsAttached = false;
-		uint32_t ConsoleFlags      = 0;
+		HANDLE   ConsoleHandle           = INVALID_HANDLE_VALUE;
+		bool     ConsoleIsAttached       = false;
+		uint32_t ConsoleFlags            = 0;
+
+		uint64_t PerformanceFrequency    = 0;
+		uint64_t StartupPerformanceCount = 0;
 	};
 	static WindowsPlatformData* s_PlatformData = nullptr;
 
@@ -26,6 +29,14 @@ namespace Blueberry {
 			return false;
 		new (s_PlatformData) WindowsPlatformData();
 
+		LARGE_INTEGER performance_frequency;
+		QueryPerformanceFrequency(&performance_frequency);
+		s_PlatformData->PerformanceFrequency = performance_frequency.QuadPart;
+
+		LARGE_INTEGER performance_count;
+		QueryPerformanceCounter(&performance_count);
+		s_PlatformData->StartupPerformanceCount = performance_count.QuadPart;
+
 #if !BLUE_BUILD_SHIPPING
 		s_PlatformData->ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -33,7 +44,7 @@ namespace Blueberry {
 			return false;
 
 		s_PlatformData->ConsoleIsAttached = true;
-		ConsoleSetFlags(BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_WHITE_TEXT);
+		SetConsoleFlags(BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_WHITE_TEXT);
 #endif
 
 		return true;
@@ -45,7 +56,7 @@ namespace Blueberry {
 			return;
 
 #if !BLUE_BUILD_SHIPPING
-		ConsoleSetFlags(BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_WHITE_TEXT);
+		SetConsoleFlags(BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_WHITE_TEXT);
 #endif
 
 		s_PlatformData->~WindowsPlatformData();
@@ -53,17 +64,39 @@ namespace Blueberry {
 		s_PlatformData = nullptr;
 	}
 
-	void* Platform::MemoryAllocate(SizeT block_size)
+	void* Platform::Allocate(SizeT block_size)
 	{
 		return malloc((size_t)block_size);
 	}
 
-	void Platform::MemoryFree(void* memory_block)
+	void Platform::Free(void* memory_block)
 	{
 		free(memory_block);
 	}
 
-	void Platform::TimeGetLocalTime(SystemTime& out_local_time)
+	void Platform::SleepFor(double sleep_time_mili)
+	{
+		Sleep((DWORD)sleep_time_mili);
+	}
+
+	uint64_t Platform::GetPerformanceCount()
+	{
+		LARGE_INTEGER performance_counter;
+		QueryPerformanceCounter(&performance_counter);
+		return performance_counter.QuadPart;
+	}
+
+	uint64_t Platform::GetPerformanceFrequency()
+	{
+		return s_PlatformData->PerformanceFrequency;
+	}
+
+	uint64_t Platform::GetStartupPerformanceCount()
+	{
+		return s_PlatformData->StartupPerformanceCount;
+	}
+
+	void Platform::GetLocalSystemTime(SystemTime& out_local_time)
 	{
 		SYSTEMTIME local_time;
 		GetLocalTime(&local_time);
@@ -77,7 +110,7 @@ namespace Blueberry {
 		out_local_time.Year = local_time.wYear;
 	}
 
-	void Platform::ConsoleSetFlags(uint32_t flags)
+	void Platform::SetConsoleFlags(uint32_t flags)
 	{
 		if (!s_PlatformData->ConsoleIsAttached)
 			return;
@@ -89,12 +122,12 @@ namespace Blueberry {
 		s_PlatformData->ConsoleFlags = flags;
 	}
 
-	uint32_t Platform::ConsoleGetFlags()
+	uint32_t Platform::GetConsoleFlags()
 	{
 		return s_PlatformData->ConsoleFlags;
 	}
 
-	void Platform::ConsoleWrite(StringView message)
+	void Platform::WriteToConsole(StringView message)
 	{
 		if (!s_PlatformData->ConsoleIsAttached)
 			return;

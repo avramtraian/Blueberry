@@ -1,21 +1,11 @@
 #pragma once
 
 #include "Core/Base.h"
+#include "Core/Time.h"
 #include "Core/Containers/String.h"
 
 namespace Blueberry {
 	
-	struct SystemTime
-	{
-		uint32_t Milisecond = 0;
-		uint32_t Second     = 0;
-		uint32_t Minute     = 0;
-		uint32_t Hour       = 0;
-		uint32_t Day        = 0;
-		uint32_t Month      = 0;
-		uint32_t Year       = 0;
-	};
-
 	class BLUEBERRY_API Platform
 	{
 	public:
@@ -23,20 +13,31 @@ namespace Blueberry {
 
 		static void Shutdown();
 
+	// Memory
 	public:
-		static void* MemoryAllocate(SizeT block_size);
+		static void* Allocate(SizeT block_size);
 
-		static void MemoryFree(void* memory_block);
+		static void Free(void* memory_block);
 
+	// Time
 	public:
-		static void TimeGetLocalTime(SystemTime& out_local_time);
+		static void SleepFor(double sleep_time_mili);
 
+		static uint64_t GetPerformanceCount();
+
+		static uint64_t GetPerformanceFrequency();
+
+		static uint64_t GetStartupPerformanceCount();
+
+		static void GetLocalSystemTime(SystemTime& out_local_time);
+
+	// Console
 	public:
-		static void ConsoleSetFlags(uint32_t flags);
+		static void SetConsoleFlags(uint32_t flags);
 		
-		static uint32_t ConsoleGetFlags();
+		static uint32_t GetConsoleFlags();
 
-		static void ConsoleWrite(StringView message);
+		static void WriteToConsole(StringView message);
 	};
 
 	enum ConsoleFlagsEnum : uint32_t

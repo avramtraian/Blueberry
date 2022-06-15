@@ -2,14 +2,21 @@
 
 #include "CoreMinimal.h"
 
+#include "Window.h"
+
 namespace Blueberry {
 
-	class Window;
+	struct ApplicationInfo
+	{
+		String     ApplicationName;
+
+		WindowData PrimaryWindow;
+	};
 
 	class BLUEBERRY_API Application
 	{
 	public:
-		Application();
+		Application(const ApplicationInfo& info);
 		virtual ~Application();
 
 	public:
@@ -26,6 +33,8 @@ namespace Blueberry {
 		static Application* s_Instance;
 
 	private:
+		ApplicationInfo m_Info;
+
 		bool m_IsRunning = false;
 
 		Vector<Window*> m_Windows;

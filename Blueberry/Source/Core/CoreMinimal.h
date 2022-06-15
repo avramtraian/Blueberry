@@ -3,6 +3,7 @@
 #include "Base.h"
 #include "Log.h"
 #include "Assert.h"
+#include "Time.h"
 
 #include "Memory/Memory.h"
 

@@ -16,15 +16,17 @@ namespace Blueberry {
 
 	namespace Utils {
 
-		static Vector<Pair<HWND, Window*>> s_RegisteredWindows;
+		static HINSTANCE s_ProcessHandle = 0;
 
 		constexpr const TCHAR* BLUE_WINDOW_CLASS_NAME = TEXT("__Blueberry_Window_Class__");
 
 		static void RegisterWindowClass()
 		{
+			s_ProcessHandle = GetModuleHandle(NULL);
+
 			WNDCLASSEX wnd_class = {};
 
-			wnd_class.hInstance   = GetModuleHandle(NULL);
+			wnd_class.hInstance   = s_ProcessHandle;
 			wnd_class.lpfnWndProc = Blueberry::BlueberryWindowProcedure;
 			wnd_class.hIcon       = NULL;
 			wnd_class.hIconSm     = NULL;
@@ -77,6 +79,8 @@ namespace Blueberry {
 			}
 		}
 
+		static Window* s_CreatingWindow = nullptr;
+
 		static Window* FindWindowByHWND(HWND window_hwnd)
 		{
 			auto& windows = Application::Get()->GetWindows();
@@ -86,7 +90,7 @@ namespace Blueberry {
 					return window;
 			}
 
-			return nullptr;
+			return s_CreatingWindow;
 		}
 
 	}
@@ -121,12 +125,16 @@ namespace Blueberry {
 		int x_pos  = m_Data.PositionX;
 		int y_pos  = m_Data.PositionY;
 
+		Utils::s_CreatingWindow = this;
+
 		HWND window_hwnd = CreateWindowEx(
 			ex_style_flags, Utils::BLUE_WINDOW_CLASS_NAME,
 			m_Data.Title.CStr(),
 			style_flags,
 			x_pos, y_pos, width, height,
-			NULL, NULL, GetModuleHandle(NULL), NULL);
+			NULL, NULL, Utils::s_ProcessHandle, NULL);
+
+		Utils::s_CreatingWindow = nullptr;
 
 		if (window_hwnd == NULL)
 		{
@@ -148,6 +156,7 @@ namespace Blueberry {
 
 	void Window::SetTitle(StringView title)
 	{
+		m_Data.Title = title;
 		SetWindowText((HWND)m_NativeHandle, title.CStr());
 	}
 

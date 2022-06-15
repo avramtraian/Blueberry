@@ -5,13 +5,14 @@
 #include "Log.h"
 #include "Platform/Platform.h"
 
-#include "Window.h"
+#include "Time.h"
 
 namespace Blueberry {
 
 	Blueberry::Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application(const ApplicationInfo& info)
+		: m_Info(info)
 	{
 		if (s_Instance)
 		{
@@ -36,13 +37,21 @@ namespace Blueberry {
 		if (!Logger::Initialize())
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
 
-		WindowData window_data;
-		Window::Create(window_data);
+		Window::Create(m_Info.PrimaryWindow);
 
 		m_IsRunning = true;
 
+		TimePoint now = Time::GetTime();
+		TimePoint last_tick = now;
+
 		while (m_IsRunning)
 		{
+			TimeStep ts = now - last_tick;
+			last_tick = now;
+			now = Time::GetTime();
+
+			float delta_time = ts.Seconds();
+
 			for (auto& window : m_Windows)
 			{
 				window->MessageLoop();
