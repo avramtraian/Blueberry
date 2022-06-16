@@ -11,3 +11,6 @@
 #include "Core/Containers/Vector.h"
 #include "Core/Containers/String.h"
 #include "Core/Containers/Pair.h"
+#include "Core/Containers/Hash.h"
+#include "Core/Containers/Comparator.h"
+#include "Core/Containers/HashTable.h"
