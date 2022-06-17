@@ -35,7 +35,7 @@ The source code is organized into multiple branches:
       
 3.    Open the engine folder, and execute **GenerateProjectFiles.bat**. This will create the Visual Studio project files. It shouldn't take more than a few seconds.
 
-4.    Open **Blueberry.sln**. Set the **BlueberryJam** as the startup project and select the **Release** configuration, **Win64** platform. Right-click on the solution target and press **Build Solution** (*Ctrl+Shift+B*).
+4.    Open **Blueberry.sln**. Set **JamEd** as the startup project and select the **Release** configuration, **Win64** platform. Right-click on the solution target and press **Build Solution** (*Ctrl+Shift+B*).
 
 5.    After the compilation finishes, you can run the editor by pressing ***F5***.
 
