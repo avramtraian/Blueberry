@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Base.h"
-#include "Log.h"
+#include "Platform.h"
 
 #if BLUE_BUILD_DEBUG
 	#define BLUE_ENABLE_DASSERTS (1)
@@ -20,19 +20,22 @@
 #endif
 
 #if BLUE_ENABLE_DASSERTS
-	#define BLUE_CORE_DASSERT(Expression, ...) if (!(Expression)) { BLUB_CORE_FATAL(__VA_ARGS__); BLUE_DEBUGBREAK(); }
+	#define BLUE_CORE_DASSERT(Expression) if (!(Expression)) { ::Blueberry::Platform::OpenErrorDialog(); BLUE_DEBUGBREAK(); }
+
 #else
-	#define BLUE_CORE_DASSERT(Expression, ...)
+	#define BLUE_CORE_DASSERT(Expression)
 #endif
 
 #if BLUE_ENABLE_ASSERTS
-	#define BLUE_CORE_ASSERT(Expression, ...) if (!(Expression)) { BLUB_CORE_FATAL(__VA_ARGS__); BLUE_DEBUGBREAK(); }
+	#define BLUE_CORE_ASSERT(Expression) if (!(Expression)) { ::Blueberry::Platform::OpenErrorDialog(); BLUE_DEBUGBREAK(); }
+
 #else
-	#define BLUE_CORE_ASSERT(Expression, ...)
+	#define BLUE_CORE_ASSERT(Expression)
 #endif
 
 #if BLUE_ENABLE_VERIFIES
-	#define BLUE_CORE_VERIFY(Expression) if (!(Expression)) { BLUB_CORE_FATAL(TEXT("VERIFY FAILED")); BLUE_DEBUGBREAK(); }
+	#define BLUE_CORE_VERIFY(Expression) if (!(Expression)) { ::Blueberry::Platform::OpenErrorDialog(); BLUE_DEBUGBREAK(); }
+
 #else
-	#define BLUE_CORE_VERIFY(Expression) { Expression; }
+	#define BLUE_CORE_VERIFY(Expression) Expression
 #endif

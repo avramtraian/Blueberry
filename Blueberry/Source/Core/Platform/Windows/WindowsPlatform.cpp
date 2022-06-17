@@ -138,6 +138,11 @@ namespace Blueberry {
 		}
 	}
 
+	void Platform::OpenErrorDialog()
+	{
+		MessageBox(NULL, TEXT("Blueberry Engine has crashed! This is usually caused by a failed assertion."), TEXT("Blueberry Runtime Error"), MB_OK | MB_ICONERROR);
+	}
+
 }
 
 #endif

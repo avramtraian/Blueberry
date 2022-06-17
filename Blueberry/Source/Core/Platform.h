@@ -13,13 +13,11 @@ namespace Blueberry {
 
 		static void Shutdown();
 
-	// Memory
 	public:
 		static void* Allocate(SizeT block_size);
 
 		static void Free(void* memory_block);
 
-	// Time
 	public:
 		static void SleepFor(double sleep_time_mili);
 
@@ -31,13 +29,15 @@ namespace Blueberry {
 
 		static void GetLocalSystemTime(SystemTime& out_local_time);
 
-	// Console
 	public:
 		static void SetConsoleFlags(uint32_t flags);
 		
 		static uint32_t GetConsoleFlags();
 
 		static void WriteToConsole(StringView message);
+
+	public:
+		static void OpenErrorDialog();
 	};
 
 	enum ConsoleFlagsEnum : uint32_t
