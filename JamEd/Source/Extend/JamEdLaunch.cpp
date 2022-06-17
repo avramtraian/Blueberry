@@ -9,7 +9,7 @@ namespace Blueberry {
 		JamEdApplication(const ApplicationInfo& info)
 			: Application(info)
 		{
-			AddLayer(new EditorLayer());
+			AddLayer(bbnew EditorLayer());
 		}
 
 		virtual ~JamEdApplication() override
@@ -28,7 +28,7 @@ namespace Blueberry {
 		info.PrimaryWindow.Flags         = BLUE_WINDOW_FLAG_MAXIMIZED;
 		info.PrimaryWindow.EventCallback = Application::OnEvent;
 
-		return new JamEdApplication(info);
+		return bbnew JamEdApplication(info);
 	}
 
 }

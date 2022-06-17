@@ -33,7 +33,7 @@ namespace Blueberry {
 		if (s_InputData)
 			return false;
 
-		s_InputData = new InputData();
+		s_InputData = bbnew InputData();
 		if (!s_InputData)
 			return false;
 

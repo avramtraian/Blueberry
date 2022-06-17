@@ -7,9 +7,13 @@ namespace Blueberry {
 	class BLUEBERRY_API Memory
 	{
 	public:
-		static bool Initialize();
+		static bool Initialize(bool enable_profiling_tools);
 
 		static void Shutdown();
+
+		static void EnableMemoryProfiling();
+
+		static void DisableMemoryProfiling();
 
 	public:
 		static void Copy(void* destination, const void* source, SizeT copy_size);
@@ -17,8 +21,9 @@ namespace Blueberry {
 		static void Zero(void* destination, SizeT zero_size);
 
 	public:
-		static void* AllocateRaw(SizeT block_size);
-		static void* Allocate(SizeT block_size);
+		BLUE_NODISCARD static void* AllocateRaw(SizeT block_size);
+		BLUE_NODISCARD static void* Allocate(SizeT block_size);
+		BLUE_NODISCARD static void* AllocateTaggedI(SizeT block_size, const TCHAR* file, const TCHAR* function_sig, uint32_t line);
 
 		static void FreeRaw(void* memory_block);
 		static void Free(void* memory_block);
@@ -33,6 +38,11 @@ namespace Blueberry {
 		static void* Allocate(SizeT block_size)
 		{
 			return Memory::Allocate(block_size);
+		}
+
+		static void* AllocateTaggedI(SizeT block_size, const TCHAR* file, const TCHAR* function_sig, uint32_t line)
+		{
+			return Memory::AllocateTaggedI(block_size, file, function_sig, line);
 		}
 
 		static void Free(void* memory_block, SizeT)
@@ -54,6 +64,11 @@ namespace Blueberry {
 
 	public:
 		static void* Allocate(SizeT block_size)
+		{
+			return Memory::AllocateRaw(block_size);
+		}
+
+		static void* AllocateTaggedI(SizeT block_size, const TCHAR* file, const TCHAR* function_sig, uint32_t line)
 		{
 			return Memory::AllocateRaw(block_size);
 		}
@@ -81,8 +96,12 @@ namespace Blueberry {
 
 }
 
-
 void* operator new(size_t block_size);
+void* operator new(size_t block_size, const Blueberry::TCHAR* file, const Blueberry::TCHAR* function_sig, uint32_t line);
 inline void* operator new(size_t, void*) noexcept;
 
 void operator delete(void* memory_block) noexcept;
+
+#define AllocateTagged(block_size) AllocateTaggedI(block_size, BLUE_FILE, BLUE_FUNCTION_SIG, BLUE_LINE)
+
+#define bbnew new (BLUE_FILE, BLUE_FUNCTION_SIG, BLUE_LINE)

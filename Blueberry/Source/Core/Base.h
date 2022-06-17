@@ -17,6 +17,13 @@
 	#endif
 #endif
 
+#ifndef _UNICODE
+	#error Blueberry requires Unicode!
+#endif
+
+#define BLUE_TEXT(x) L##x
+#define TEXT(x) BLUE_TEXT(x)
+
 #ifdef _MSC_BUILD
 	#define BLUE_COMPILER_MSVC (1)
 #endif
@@ -30,15 +37,15 @@
 	#define BLUE_FORCEINLINE   __forceinline
 	#define BLUE_DEBUGBREAK()  __debugbreak()
 
-	#define BLUE_FUNCTION      __FUNCTION__
-	#define BLUE_FUNCTION_SIG  __FUNCSIG__
+	#define BLUE_FUNCTION      TEXT(__FUNCTION__)
+	#define BLUE_FUNCTION_SIG  TEXT(__FUNCSIG__)
 
 	// class 'A' needs to have dll - interface to be used by clients of class 'B'
 	#pragma warning (disable : 4251)
 
 #endif
 
-#define BLUE_FILE              __FILE__
+#define BLUE_FILE              TEXT(__FILE__)
 #define BLUE_LINE              __LINE__
 #define BLUE_DATE              __DATE__
 
@@ -60,13 +67,6 @@
 #endif
 
 #include <cstdint>
-
-#ifndef _UNICODE
-	#error Blueberry requires Unicode!
-#endif
-
-#define BLUE_TEXT(x) L##x
-#define TEXT(x) BLUE_TEXT(x)
 
 #define BLUE_ARRAY_LENGTH(Arr) (sizeof(Arr) / sizeof(Arr[0]))
 

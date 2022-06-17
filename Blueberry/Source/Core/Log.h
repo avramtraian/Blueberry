@@ -34,8 +34,11 @@ namespace Blueberry {
 		template<typename... Args>
 		static void Log(Verbosity verbosity, StringView message, Args&&... args)
 		{
-			auto written = std::vformat_to(m_Buffer, message.CStr(), std::make_wformat_args(Blueberry::Forward<Args>(args)...));
-			Log(verbosity, { m_Buffer, (size_t)(written - &m_Buffer[0]) });
+			auto written_ptr = std::vformat_to(m_Buffer, message.CStr(), std::make_wformat_args(Blueberry::Forward<Args>(args)...));
+			SizeT written = written_ptr - &m_Buffer[0];
+			m_Buffer[written] = 0;
+
+			Log(verbosity, { m_Buffer, written });
 		}
 
 	private:

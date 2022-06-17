@@ -83,6 +83,7 @@ namespace Blueberry {
 						break;
 					}
 
+					delete m_Windows[index];
 					m_Windows.Remove(index);
 				}
 			}
@@ -99,6 +100,8 @@ namespace Blueberry {
 		for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); it--)
 			delete (*it);
 
+		for (auto& window : m_Windows)
+			delete window;
 		m_Windows.Clear();
 
 		Input::Shutdown();

@@ -17,7 +17,7 @@ namespace Blueberry {
 		if (s_LoggerData)
 			return false;
 		
-		s_LoggerData = new LoggerData();
+		s_LoggerData = bbnew LoggerData();
 		if (!s_LoggerData)
 			return false;
 

@@ -2,8 +2,10 @@
 
 #include "ExitCode.h"
 
+#include "Core/Base.h"
 #include "Core/Application.h"
 #include "Core/Platform.h"
+#include "Core/Memory.h"
 
 namespace Blueberry {
 	
@@ -12,6 +14,9 @@ namespace Blueberry {
 	inline int32_t BlueberryMain(TCHAR** cmd_params, uint32_t cmd_params_num)
 	{
 		if (!Platform::Initialize())
+			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
+
+		if (!Memory::Initialize(true))
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
 
 		int32_t return_code = BLUE_EXIT_CODE_SUCCESS;
@@ -29,6 +34,7 @@ namespace Blueberry {
 		}
 		while (s_RestartApplication);
 
+		Memory::Shutdown();
 		Platform::Shutdown();
 
 		return return_code;

@@ -10,9 +10,9 @@ namespace Blueberry {
 
 	struct ApplicationInfo
 	{
-		String     ApplicationName;
+		const TCHAR* ApplicationName;
 
-		WindowData PrimaryWindow;
+		WindowData   PrimaryWindow;
 	};
 
 	class BLUEBERRY_API Application

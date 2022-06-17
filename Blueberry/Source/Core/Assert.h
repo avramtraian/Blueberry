@@ -32,7 +32,7 @@
 #endif
 
 #if BLUE_ENABLE_VERIFIES
-	#define BLUE_CORE_VERIFY(Expression) if (!(Expression)) { BLUB_CORE_FATAL("VERIFY FAILED"); BLUE_DEBUGBREAK(); }
+	#define BLUE_CORE_VERIFY(Expression) if (!(Expression)) { BLUB_CORE_FATAL(TEXT("VERIFY FAILED")); BLUE_DEBUGBREAK(); }
 #else
-	#define BLUE_CORE_ASSERT(Expression) { Expression; }
+	#define BLUE_CORE_VERIFY(Expression) { Expression; }
 #endif

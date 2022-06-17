@@ -348,6 +348,13 @@ namespace Blueberry {
 			m_Size--;
 		}
 
+		void RemoveIndex(SizeT index)
+		{
+			m_Entries[index].~Entry();
+			m_Flags[index] = ENTRY_FLAG_Deleted;
+			m_Size--;
+		}
+
 		void RemoveIfExists(const KeyType& key)
 		{
 			SizeT index = Find(key);
@@ -378,7 +385,7 @@ namespace Blueberry {
 	private:
 		void ReAllocate(SizeT new_capacity)
 		{
-			void* new_block = m_AllocatorInstance.Allocate(new_capacity * (sizeof(Entry) + sizeof(EntryFlag)));
+			void* new_block = m_AllocatorInstance.AllocateTagged(new_capacity * (sizeof(Entry) + sizeof(EntryFlag)));
 			Entry* new_entries = (Entry*)new_block;
 			EntryFlag* new_flags = (EntryFlag*)(new_entries + new_capacity);
 
@@ -475,7 +482,7 @@ namespace Blueberry {
 			{
 				if (other.m_Size > 0)
 				{
-					ReAllocate(other.m_Size * INVERSE_MAX_LOAD_FACTOR + 1);
+					ReAllocate((SizeT)(other.m_Size * INVERSE_MAX_LOAD_FACTOR) + 1);
 
 					for (SizeT index = 0; index < other.m_Capacity; index++)
 					{
