@@ -72,11 +72,13 @@
 
 namespace Blueberry {
 
-	using TCHAR = wchar_t;
+	using TCHAR    = wchar_t;
 
-	using SizeT = uint64_t;
+	using SizeT    = uint64_t;
 
-	constexpr SizeT BLUE_INVALID_SIZE = 0xffffffffffffffff;
+	using NullptrT = decltype(nullptr);
+
+	constexpr SizeT BLUE_INVALID_SIZE = 0xFFFFFFFFFFFFFFFF;
 
 }
 
