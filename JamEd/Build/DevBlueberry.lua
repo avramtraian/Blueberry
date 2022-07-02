@@ -1,47 +1,49 @@
 project "Blueberry"
 	location "%{wks.location}/Blueberry"
+
 	kind "SharedLib"
 	language "C++"
 	cppdialect "C++20"
 	staticruntime "Off"
 
-	targetdir "%{wks.location}/Binaries/%{cfg.platform}/%{cfg.buildcfg}"
+	characterset "Unicode"
+	exceptionhandling "Off"
+	rtti "Off"
+
+	BinariesDir = "%{wks.location}/Binaries/%{cfg.platform}/%{cfg.buildcfg}"
 	objdir "%{wks.location}/Intermediate/Binaries/%{cfg.buildcfg}/%{prj.name}"
-	targetname "Blueberry"
+	targetdir (BinariesDir)
+	targetname "Blueberry-Core"
+
+	debugdir (BinariesDir)
 
 	pchheader "blubpch.h"
-	-- NOTE (Avr): Token expansion seems broken when used in 'pchsource'
+	-- NOTE (Avr): Token expansion seems broken when used in 'pchsource'.
 	pchsource "../../Blueberry/Source/blubpch.cpp"
 
-	rtti "Off"
-	exceptionhandling "Off"
-
-	characterset "Unicode"
-
-	files
-	{
+	files {
 		"%{prj.location}/Source/**.cpp",
 		"%{prj.location}/Source/**.h"
 	}
 
-	includedirs
-	{
-		IncludeDirs["Blueberry"]
+	includedirs {
+		IncludeDirectories["Blueberry"]
 	}
 
-	defines
-	{
-		"BLUE_BUILD_DLL"
-	}
-
-	forceincludes
-	{
+	forceincludes {
 		"blubpch.h"
 	}
 
+	defines {
+		"BLUE_BUILD_SHARED_LIBRARY"
+	}
+
+	links {
+
+	}
+
 	filter "platforms:Win64"
-		defines
-		{
+		defines {
 			"BLUE_PLATFORM_WINDOWS=(1)",
 			"BLUE_PLATFORM_WIN64=(1)"
 		}
@@ -50,8 +52,7 @@ project "Blueberry"
 	filter {}
 		
 	filter "configurations:Debug"
-		defines
-		{
+		defines {
 			"BLUE_BUILD_DEBUG=(1)"
 		}
 
@@ -60,8 +61,7 @@ project "Blueberry"
 		symbols "On"
 		
 	filter "configurations:Release"
-		defines
-		{
+		defines {
 			"BLUE_BUILD_RELEASE=(1)"
 		}
 
@@ -70,8 +70,7 @@ project "Blueberry"
 		symbols "On"
 		
 	filter "configurations:Shipping"
-		defines
-		{
+		defines {
 			"BLUE_BUILD_SHIPPING=(1)"
 		}
 

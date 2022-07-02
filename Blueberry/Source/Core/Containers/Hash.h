@@ -2,147 +2,63 @@
 
 #include "Core/Base.h"
 
+#define BLUE_DECL_HASH_PRIMITIVE(T, Bits)                   \
+	template<>                                              \
+	struct Hasher<T>                                        \
+	{                                                       \
+	public:                                                 \
+		static HashT Get(T const& value)                    \
+		{                                                   \
+			return (HashT)(*(const uint##Bits##_t*)&value); \
+		}                                                   \
+	}
+
 namespace Blueberry {
 
 	using HashT = uint64_t;
 
 	template<typename T>
-	class Hasher
+	struct Hasher
 	{
 	public:
-		static HashT Get(const T&)
+		static HashT Get(const T&) { return 0; }
+	};
+
+	BLUE_DECL_HASH_PRIMITIVE(uint8_t,     8 );
+	BLUE_DECL_HASH_PRIMITIVE(uint16_t,    16);
+	BLUE_DECL_HASH_PRIMITIVE(uint32_t,    32);
+	BLUE_DECL_HASH_PRIMITIVE(uint64_t,    64);
+
+	BLUE_DECL_HASH_PRIMITIVE(int8_t,      8 );
+	BLUE_DECL_HASH_PRIMITIVE(int16_t,     16);
+	BLUE_DECL_HASH_PRIMITIVE(int32_t,     32);
+	BLUE_DECL_HASH_PRIMITIVE(int64_t,     64);
+
+	BLUE_DECL_HASH_PRIMITIVE(float,       32);
+	BLUE_DECL_HASH_PRIMITIVE(double,      64);
+
+	BLUE_DECL_HASH_PRIMITIVE(const void*, 64);
+	BLUE_DECL_HASH_PRIMITIVE(void*,       64);
+
+	BLUE_DECL_HASH_PRIMITIVE(CharT,       16);
+
+	template<>
+	struct Hasher<const CharT*>
+	{
+	public:
+		static HashT Get(const CharT* const& value)
 		{
-			return 0;
+			return std::hash<const wchar_t*>()(value);
 		}
 	};
 
 	template<>
-	class Hasher<uint8_t>
+	struct Hasher<CharT*>
 	{
 	public:
-		static HashT Get(const uint8_t& value)
+		static HashT Get(CharT* const& value)
 		{
-			return (HashT)value;
-		}
-	};
-
-	template<>
-	class Hasher<uint16_t>
-	{
-	public:
-		static HashT Get(const uint16_t& value)
-		{
-			return (HashT)value;
-		}
-	};
-
-	template<>
-	class Hasher<uint32_t>
-	{
-	public:
-		static HashT Get(const uint32_t& value)
-		{
-			return (HashT)value;
-		}
-	};
-
-	template<>
-	class Hasher<uint64_t>
-	{
-	public:
-		static HashT Get(const uint64_t& value)
-		{
-			return (HashT)value;
-		}
-	};
-
-	template<>
-	class Hasher<int8_t>
-	{
-	public:
-		static HashT Get(const int8_t& value)
-		{
-			return (HashT)(*(const uint8_t*)&value);
-		}
-	};
-
-	template<>
-	class Hasher<int16_t>
-	{
-	public:
-		static HashT Get(const int16_t& value)
-		{
-			return (HashT)(*(const uint16_t*)&value);
-		}
-	};
-
-	template<>
-	class Hasher<int32_t>
-	{
-	public:
-		static HashT Get(const int32_t& value)
-		{
-			return (HashT)(*(const uint32_t*)&value);
-		}
-	};
-
-	template<>
-	class Hasher<int64_t>
-	{
-	public:
-		static HashT Get(const int64_t& value)
-		{
-			return (HashT)(*(const uint64_t*)&value);
-		}
-	};
-
-	template<>
-	class Hasher<float>
-	{
-	public:
-		static HashT Get(const float& value)
-		{
-			return (HashT)(*(const uint32_t*)&value);
-		}
-	};
-
-	template<>
-	class Hasher<double>
-	{
-	public:
-		static HashT Get(const double& value)
-		{
-			return (HashT)(*(const uint64_t*)&value);
-		}
-	};
-
-	template<>
-	class Hasher<TCHAR>
-	{
-	public:
-		static HashT Get(const TCHAR& value)
-		{
-			return (HashT)value;
-		}
-	};
-
-	template<>
-	class Hasher<const TCHAR*>
-	{
-	public:
-		static HashT Get(const TCHAR* const& value)
-		{
-			return 1;
-		}
-	};
-
-	template<>
-	class Hasher<void*>
-	{
-	public:
-		static HashT Get(void* const& value)
-		{
-			return (SizeT)value;
+			return Hasher<const CharT*>::Get((const CharT*)value);
 		}
 	};
 

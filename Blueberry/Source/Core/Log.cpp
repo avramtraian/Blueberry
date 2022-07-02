@@ -4,7 +4,7 @@
 
 namespace Blueberry {
 
-	TCHAR Logger::m_Buffer[] = {};
+	CharT Logger::m_Buffer[] = {};
 
 	struct LoggerData
 	{
@@ -62,7 +62,7 @@ namespace Blueberry {
 			BLUE_CONSOLE_FLAG_RED_BACKGROUND   | BLUE_CONSOLE_FLAG_BRIGHT_WHITE_TEXT
 		};
 
-		static const TCHAR* verbosity_names[] =
+		static const CharT* verbosity_names[] =
 		{
 			TEXT("[NONE] "),
 			TEXT("[DEBUG]"),
@@ -76,7 +76,7 @@ namespace Blueberry {
 		SystemTime time;
 		Platform::GetLocalSystemTime(time);
 
-		static TCHAR buffer[8192] = {};
+		static CharT buffer[8192] = {};
 		auto written = std::format_to_n(
 			buffer, BLUE_ARRAY_LENGTH(buffer),
 			TEXT("[{:02}:{:02}:{:02}]{} BLUEBERRY: {}\n"),

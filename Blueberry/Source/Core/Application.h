@@ -10,7 +10,7 @@ namespace Blueberry {
 
 	struct ApplicationInfo
 	{
-		const TCHAR* ApplicationName;
+		const CharT* ApplicationName;
 
 		WindowData   PrimaryWindow;
 	};
@@ -27,7 +27,7 @@ namespace Blueberry {
 		static void OnEvent(const Window* window, Event& e);
 
 	public:
-		int32_t Run(TCHAR** cmd_params, uint32_t cmd_params_num);
+		int32_t Run(CharT** cmd_params, uint32_t cmd_params_num);
 
 		void AddLayer(Layer* layer);
 

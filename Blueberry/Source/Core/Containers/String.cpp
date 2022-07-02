@@ -2,14 +2,14 @@
 
 namespace Blueberry { namespace StringCalls_TCHAR {
 
-	size_t Length(const TCHAR* string)
+	size_t Length(const CharT* string)
 	{
-		const TCHAR* first = string;
+		const CharT* first = string;
 		while (*(string++));
 		return string - first - 1;
 	}
 
-	bool Equals(const TCHAR* string_a, const TCHAR* string_b)
+	bool Equals(const CharT* string_a, const CharT* string_b)
 	{
 		while (*(string_a++) && *(string_b++))
 		{
@@ -33,12 +33,12 @@ namespace Blueberry {
 		, m_Length(string.Length())
 	{}
 
-	StringView::StringView(const TCHAR* string)
+	StringView::StringView(const CharT* string)
 		: m_Data(string)
 		, m_Length(StringCalls_TCHAR::Length(string))
 	{}
 
-	StringView::StringView(const TCHAR* string, SizeT string_length)
+	StringView::StringView(const CharT* string, SizeT string_length)
 		: m_Data(string)
 		, m_Length(string_length)
 	{}
@@ -57,7 +57,7 @@ namespace Blueberry {
 		return *this;
 	}
 
-	StringView& StringView::operator=(const TCHAR* string)
+	StringView& StringView::operator=(const CharT* string)
 	{
 
 		m_Data = string;
@@ -84,20 +84,20 @@ namespace Blueberry {
 	String::String(StringView string_view)
 	{
 		m_Data.SetSizeUninitialized(string_view.Length() + 1);
-		Memory::Copy(m_Data.Data(), string_view.Data(), m_Data.Size() * sizeof(TCHAR));
+		Memory::Copy(m_Data.Data(), string_view.Data(), m_Data.Size() * sizeof(CharT));
 		m_Data.Back() = 0;
 	}
 
-	String::String(const TCHAR* string)
+	String::String(const CharT* string)
 	{
 		m_Data.SetSizeUninitialized(StringCalls_TCHAR::Length(string) + 1);
-		Memory::Copy(m_Data.Data(), string, m_Data.Size() * sizeof(TCHAR));
+		Memory::Copy(m_Data.Data(), string, m_Data.Size() * sizeof(CharT));
 	}
 
-	String::String(const TCHAR* string, SizeT string_length)
+	String::String(const CharT* string, SizeT string_length)
 	{
 		m_Data.SetSizeUninitialized(string_length + 1);
-		Memory::Copy(m_Data.Data(), string, m_Data.Size() * sizeof(TCHAR));
+		Memory::Copy(m_Data.Data(), string, m_Data.Size() * sizeof(CharT));
 		m_Data.Back() = 0;
 	}
 
@@ -122,17 +122,17 @@ namespace Blueberry {
 	{
 		m_Data.SetSizeInternal(0);
 		m_Data.SetSizeUninitialized(string_view.Length() + 1);
-		Memory::Copy(m_Data.Data(), string_view.Data(), m_Data.Size() * sizeof(TCHAR));
+		Memory::Copy(m_Data.Data(), string_view.Data(), m_Data.Size() * sizeof(CharT));
 		m_Data.Back() = 0;
 
 		return *this;
 	}
 
-	Blueberry::String& String::operator=(const TCHAR* string)
+	Blueberry::String& String::operator=(const CharT* string)
 	{
 		m_Data.SetSizeInternal(0);
 		m_Data.SetSizeUninitialized(StringCalls_TCHAR::Length(string) + 1);
-		Memory::Copy(m_Data.Data(), string, m_Data.Size() * sizeof(TCHAR));
+		Memory::Copy(m_Data.Data(), string, m_Data.Size() * sizeof(CharT));
 
 		return *this;
 	}

@@ -1,41 +1,47 @@
 project "JamEd"
 	location "%{wks.location}/JamEd"
-	kind "ConsoleApp"
+
 	language "C++"
 	cppdialect "C++20"
 	staticruntime "Off"
 
-	targetdir "%{wks.location}/Binaries/%{cfg.platform}/%{cfg.buildcfg}"
-	objdir "%{wks.location}/Intermediate/Binaries/%{cfg.buildcfg}/%{prj.name}"
-	targetname "JamEd"
-
+	characterset "Unicode"
 	rtti "Off"
 	exceptionhandling "Off"
 
-	characterset "Unicode"
+	BinariesDir = "%{wks.location}/Binaries/%{cfg.platform}/%{cfg.buildcfg}"
+	objdir "%{wks.location}/Intermediate/Binaries/%{cfg.buildcfg}/%{prj.name}"
+	targetdir (BinariesDir)
+	targetname "JamEd-Editor"
 
-	files
-	{
+	debugdir (BinariesDir)
+
+	files {
 		"%{prj.location}/Source/**.cpp",
 		"%{prj.location}/Source/**.h",
 
 		"%{prj.location}/Build/**.lua"
 	}
 
-	includedirs
-	{
-		IncludeDirs["JamEd"],
-		IncludeDirs["Blueberry"]
+	includedirs {
+		IncludeDirectories["JamEd"],
+		IncludeDirectories["Blueberry"]
 	}
 
-	links
-	{
+	forceincludes {
+
+	}
+
+	defines {
+		"BLUE_USE_SHARED_LIBRARY"
+	}
+
+	links {
 		"Blueberry"
 	}
 
 	filter "platforms:Win64"
-		defines
-		{
+		defines {
 			"BLUE_PLATFORM_WINDOWS=(1)",
 			"BLUE_PLATFORM_WIN64=(1)"
 		}
@@ -44,28 +50,29 @@ project "JamEd"
 	filter {}
 		
 	filter "configurations:Debug"
-		defines
-		{
+		defines {
 			"BLUE_BUILD_DEBUG=(1)"
 		}
 
 		runtime "Debug"
 		optimize "Off"
 		symbols "On"
+
+		kind "ConsoleApp"
 		
 	filter "configurations:Release"
-		defines
-		{
+		defines {
 			"BLUE_BUILD_RELEASE=(1)"
 		}
 
 		runtime "Release"
 		optimize "On"
 		symbols "On"
+
+		kind "ConsoleApp"
 		
 	filter "configurations:Shipping"
-		defines
-		{
+		defines {
 			"BLUE_BUILD_SHIPPING=(1)"
 		}
 

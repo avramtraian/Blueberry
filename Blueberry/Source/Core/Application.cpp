@@ -37,8 +37,10 @@ namespace Blueberry {
 		s_Instance = nullptr;
 	}
 
-	int32_t Application::Run(TCHAR** cmd_params, uint32_t cmd_params_num)
+	int32_t Application::Run(CharT** cmd_params, uint32_t cmd_params_num)
 	{
+		m_IsRunning = true;
+
 		if (!Logger::Initialize())
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
 
@@ -47,13 +49,11 @@ namespace Blueberry {
 
 		Window::Create(m_Info.PrimaryWindow);
 
-		m_IsRunning = true;
+		for (Layer* layer : m_Layers)
+			layer->OnAttach();
 
 		TimePoint now = Time::GetTime();
 		TimePoint last_tick = now;
-
-		for (Layer* layer : m_Layers)
-			layer->OnAttach();
 
 		while (m_IsRunning)
 		{

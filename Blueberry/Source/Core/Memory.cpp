@@ -110,7 +110,7 @@ namespace Blueberry {
 		return memory_block;
 	}
 
-	void* Memory::AllocateTaggedI(SizeT block_size, const TCHAR* file, const TCHAR* function_sig, uint32_t line)
+	void* Memory::AllocateTaggedI(SizeT block_size, const CharT* file, const CharT* function_sig, uint32_t line)
 	{
 		void* memory_block = AllocateRaw(block_size);
 
@@ -147,7 +147,7 @@ void* operator new(size_t block_size)
 	return Blueberry::Memory::Allocate(block_size);
 }
 
-void* operator new(size_t block_size, const Blueberry::TCHAR* file, const Blueberry::TCHAR* function_sig, uint32_t line)
+void* operator new(size_t block_size, const Blueberry::CharT* file, const Blueberry::CharT* function_sig, uint32_t line)
 {
 	return Blueberry::Memory::AllocateTaggedI(block_size, file, function_sig, line);
 }

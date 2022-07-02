@@ -23,7 +23,7 @@ namespace Blueberry {
 	public:
 		BLUE_NODISCARD static void* AllocateRaw(SizeT block_size);
 		BLUE_NODISCARD static void* Allocate(SizeT block_size);
-		BLUE_NODISCARD static void* AllocateTaggedI(SizeT block_size, const TCHAR* file, const TCHAR* function_sig, uint32_t line);
+		BLUE_NODISCARD static void* AllocateTaggedI(SizeT block_size, const CharT* file, const CharT* function_sig, uint32_t line);
 
 		static void FreeRaw(void* memory_block);
 		static void Free(void* memory_block);
@@ -40,7 +40,7 @@ namespace Blueberry {
 			return Memory::Allocate(block_size);
 		}
 
-		static void* AllocateTaggedI(SizeT block_size, const TCHAR* file, const TCHAR* function_sig, uint32_t line)
+		static void* AllocateTaggedI(SizeT block_size, const CharT* file, const CharT* function_sig, uint32_t line)
 		{
 			return Memory::AllocateTaggedI(block_size, file, function_sig, line);
 		}
@@ -68,7 +68,7 @@ namespace Blueberry {
 			return Memory::AllocateRaw(block_size);
 		}
 
-		static void* AllocateTaggedI(SizeT block_size, const TCHAR* file, const TCHAR* function_sig, uint32_t line)
+		static void* AllocateTaggedI(SizeT block_size, const CharT* file, const CharT* function_sig, uint32_t line)
 		{
 			return Memory::AllocateRaw(block_size);
 		}
@@ -97,7 +97,7 @@ namespace Blueberry {
 }
 
 void* operator new(size_t block_size);
-void* operator new(size_t block_size, const Blueberry::TCHAR* file, const Blueberry::TCHAR* function_sig, uint32_t line);
+void* operator new(size_t block_size, const Blueberry::CharT* file, const Blueberry::CharT* function_sig, uint32_t line);
 inline void* operator new(size_t, void*) noexcept;
 
 void operator delete(void* memory_block) noexcept;

@@ -42,7 +42,7 @@ namespace Blueberry {
 		}
 
 	private:
-		static TCHAR m_Buffer[8192];
+		static CharT m_Buffer[8192];
 	};
 
 }

@@ -6,9 +6,9 @@
 
 namespace Blueberry { namespace StringCalls_TCHAR {
 
-	BLUEBERRY_API BLUE_NODISCARD size_t Length(const TCHAR* string);
+	BLUEBERRY_API BLUE_NODISCARD size_t Length(const CharT* string);
 
-	BLUEBERRY_API BLUE_NODISCARD bool Equals(const TCHAR* string_a, const TCHAR* string_b);
+	BLUEBERRY_API BLUE_NODISCARD bool Equals(const CharT* string_a, const CharT* string_b);
 
 } }
 
@@ -24,28 +24,28 @@ namespace Blueberry{
 
 		StringView(const String& string);
 		
-		StringView(const TCHAR* string);
+		StringView(const CharT* string);
 
-		StringView(const TCHAR* string, SizeT string_length);
+		StringView(const CharT* string, SizeT string_length);
 
 	public:
 		StringView& operator=(const StringView& other);
 
 		StringView& operator=(const String& string);
 
-		StringView& operator=(const TCHAR* string);
+		StringView& operator=(const CharT* string);
 
 	public:
-		const TCHAR* Data() const { return m_Data; }
+		const CharT* Data() const { return m_Data; }
 
-		const TCHAR* CStr() const { return m_Data; }
+		const CharT* CStr() const { return m_Data; }
 
 		SizeT Length() const { return m_Length; }
 
 		bool IsEmpty() const { return (m_Length == 0); }
 
 	private:
-		const TCHAR* m_Data;
+		const CharT* m_Data;
 		SizeT m_Length;
 	};
 
@@ -60,9 +60,9 @@ namespace Blueberry{
 
 		String(StringView string_view);
 
-		String(const TCHAR* string);
+		String(const CharT* string);
 
-		String(const TCHAR* string, SizeT string_length);
+		String(const CharT* string, SizeT string_length);
 
 		~String();
 
@@ -73,12 +73,12 @@ namespace Blueberry{
 
 		String& operator=(StringView string_view);
 
-		String& operator=(const TCHAR* string);
+		String& operator=(const CharT* string);
 
 	public:
-		TCHAR* Data() const { return m_Data.Data(); }
+		CharT* Data() const { return m_Data.Data(); }
 
-		const TCHAR* CStr() const { return m_Data.Data(); }
+		const CharT* CStr() const { return m_Data.Data(); }
 
 		SizeT Length() const { return (m_Data.Size() - 1); }
 
@@ -87,7 +87,7 @@ namespace Blueberry{
 		bool IsEmpty() const { return (Length() == 1); }
 
 	private:
-		Vector<TCHAR, HeapAllocator> m_Data;
+		Vector<CharT, HeapAllocator> m_Data;
 	};
 
 }

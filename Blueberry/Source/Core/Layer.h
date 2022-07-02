@@ -22,7 +22,7 @@ namespace Blueberry {
 		virtual void OnEvent(const class Window* window, Event& e) = 0;
 
 	private:
-		const TCHAR* m_LayerName;
+		const CharT* m_LayerName;
 	};
 
 }

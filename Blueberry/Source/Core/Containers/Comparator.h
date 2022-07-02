@@ -14,12 +14,12 @@ namespace Blueberry {
 	};
 
 	template<>
-	struct Comparator<const TCHAR*>
+	struct Comparator<const CharT*>
 	{
-		static bool Compare(const TCHAR* const& a, const TCHAR* const& b)
+		static bool Compare(const CharT* const& a, const CharT* const& b)
 		{
-			const TCHAR* string_a = a;
-			const TCHAR* string_b = b;
+			const CharT* string_a = a;
+			const CharT* string_b = b;
 
 			while (*(string_a++) && *(string_b++))
 			{

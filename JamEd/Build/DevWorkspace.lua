@@ -1,17 +1,15 @@
-IncludeDirs = {}
-LibDirs = {}
-LibNames = {}
+IncludeDirectories = {}
+LibraryDirectories = {}
+LibraryNames = {}
 
 workspace "Blueberry"
 	location "../../"
 
-	configurations
-	{
+	configurations {
 		"Debug", "Release", "Shipping"
 	}
 
-	platforms
-	{
+	platforms {
 		"Win64"
 	}
 
@@ -22,13 +20,13 @@ workspace "Blueberry"
 
 	startproject "JamEd"
 
-	IncludeDirs["Blueberry"] = "%{wks.location}/Blueberry/Source"
-	IncludeDirs["JamEd"] = "%{wks.location}/JamEd/Source"
+	IncludeDirectories["Blueberry"] = "%{wks.location}/Blueberry/Source"
+	IncludeDirectories["JamEd"]     = "%{wks.location}/JamEd/Source"
 
 	VulkanSDKPath = os.getenv("VULKAN_SDK")
-	IncludeDirs["VulkanSDK"] = "%{VulkanSDKPath}/Include"
-	LibDirs["VulkanSDK"] = "%{VulkanSDKPath}/Lib"
-	LibNames["VulkanSDK"] = "vulkan-1.lib"
+	IncludeDirectories["VulkanSDK"] = (VulkanSDKPath.."/Include")
+	LibraryDirectories["VulkanSDK"] = (VulkanSDKPath.."/Lib")
+	LibraryNames["VulkanSDK"]       = "vulkan-1.lib"
 
 	group "Core"
 		include "DevBlueberry.lua"	

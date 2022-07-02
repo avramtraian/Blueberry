@@ -37,10 +37,10 @@ namespace Blueberry {
 		static void Shutdown();
 
 	public:
-		static void TrackAllocation(void* memory_block, SizeT block_size, const TCHAR* file, const TCHAR* function_sig, uint32_t line);
+		static void TrackAllocation(void* memory_block, SizeT block_size, const CharT* file, const CharT* function_sig, uint32_t line);
 		static void TrackDeallocation(void* memory_block);
 
-		static const HashTable<const TCHAR*, FileMemoryProfilingInfo, UntrackedAllocator>& Data();
+		static const HashTable<const CharT*, FileMemoryProfilingInfo, UntrackedAllocator>& Data();
 	};
 
 }

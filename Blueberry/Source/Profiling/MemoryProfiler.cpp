@@ -6,7 +6,7 @@ namespace Blueberry {
 
 	struct AllocationInfo
 	{
-		const TCHAR* File      = TEXT("Unknown");
+		const CharT* File      = TEXT("Unknown");
 		uint32_t     Line      = 0;
 		SizeT        BlockSize = 0;
 	};
@@ -14,7 +14,7 @@ namespace Blueberry {
 	struct MemoryProfilerData
 	{
 		HashTable<void*,        AllocationInfo,          UntrackedAllocator> Allocations;
-		HashTable<const TCHAR*, FileMemoryProfilingInfo, UntrackedAllocator> FilesProfilingInfo;
+		HashTable<const CharT*, FileMemoryProfilingInfo, UntrackedAllocator> FilesProfilingInfo;
 	};
 	static MemoryProfilerData* s_MemoryProfilerData = nullptr;
 
@@ -42,7 +42,7 @@ namespace Blueberry {
 		s_MemoryProfilerData = nullptr;
 	}
 
-	void MemoryProfiler::TrackAllocation(void* memory_block, SizeT block_size, const TCHAR* file, const TCHAR* function_sig, uint32_t line)
+	void MemoryProfiler::TrackAllocation(void* memory_block, SizeT block_size, const CharT* file, const CharT* function_sig, uint32_t line)
 	{
 		if (memory_block == nullptr)
 			return;
@@ -81,7 +81,7 @@ namespace Blueberry {
 		s_MemoryProfilerData->Allocations.RemoveIndex(allocation_info_index);
 	}
 
-	const HashTable<const TCHAR*, FileMemoryProfilingInfo, UntrackedAllocator>& MemoryProfiler::Data()
+	const HashTable<const CharT*, FileMemoryProfilingInfo, UntrackedAllocator>& MemoryProfiler::Data()
 	{
 		return s_MemoryProfilerData->FilesProfilingInfo;
 	}

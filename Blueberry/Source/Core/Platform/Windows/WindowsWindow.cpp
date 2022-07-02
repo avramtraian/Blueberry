@@ -22,7 +22,7 @@ namespace Blueberry {
 
 		static HINSTANCE s_ProcessHandle = 0;
 
-		constexpr const TCHAR* BLUE_WINDOW_CLASS_NAME = TEXT("__Blueberry_Window_Class__");
+		constexpr const CharT* BLUE_WINDOW_CLASS_NAME = TEXT("__Blueberry_Window_Class__");
 
 		static void RegisterWindowClass()
 		{

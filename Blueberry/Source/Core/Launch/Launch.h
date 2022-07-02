@@ -11,7 +11,7 @@ namespace Blueberry {
 	
 	static bool s_RestartApplication = false;
 
-	inline int32_t BlueberryMain(TCHAR** cmd_params, uint32_t cmd_params_num)
+	inline int32_t BlueberryMain(CharT** cmd_params, uint32_t cmd_params_num)
 	{
 		if (!Platform::Initialize())
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
