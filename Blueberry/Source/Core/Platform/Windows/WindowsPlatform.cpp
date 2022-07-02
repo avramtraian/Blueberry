@@ -1,3 +1,6 @@
+// Copyright to Avram Traian. 2022 - 2022.
+// File created on June 13 2022.
+
 #if BLUE_PLATFORM_WINDOWS
 
 #include "Core/Platform.h"

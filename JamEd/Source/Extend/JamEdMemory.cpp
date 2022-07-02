@@ -1,3 +1,6 @@
+// Copyright to Avram Traian. 2022 - 2022.
+// File created on June 17 2022.
+
 #include "Core/Memory.h"
 
 void* operator new(size_t block_size)

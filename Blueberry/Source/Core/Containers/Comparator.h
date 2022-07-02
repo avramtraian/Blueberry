@@ -1,3 +1,6 @@
+// Copyright to Avram Traian. 2022 - 2022.
+// File created on June 16 2022.
+
 #pragma once
 
 #include "Core/Base.h"

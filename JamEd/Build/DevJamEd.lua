@@ -1,3 +1,6 @@
+-- Copyright to Avram Traian. 2022 - 2022.
+-- File created on June 13 2022.
+
 project "JamEd"
 	location "%{wks.location}/JamEd"
 
