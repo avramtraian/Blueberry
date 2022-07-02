@@ -38,6 +38,8 @@ namespace Blueberry{
 
 		StringView& operator=(const CharT* string);
 
+		const CharT* operator*() const;
+
 	public:
 		const CharT* Data() const { return m_Data; }
 
@@ -77,6 +79,8 @@ namespace Blueberry{
 		String& operator=(StringView string_view);
 
 		String& operator=(const CharT* string);
+
+		const CharT* operator*() const;
 
 	public:
 		CharT* Data() const { return m_Data.Data(); }

@@ -46,6 +46,11 @@ namespace Blueberry {
 		, m_Length(string_length)
 	{}
 
+	const CharT* StringView::operator*() const
+	{
+		return CStr();
+	}
+
 	StringView& StringView::operator=(const StringView& other)
 	{
 		m_Data = other.m_Data;
@@ -109,19 +114,24 @@ namespace Blueberry {
 		m_Data.SetSizeInternal(0);
 	}
 
-	Blueberry::String& String::operator=(const String& other)
+	const CharT* String::operator*() const
+	{
+		return CStr();
+	}
+
+	String& String::operator=(const String& other)
 	{
 		m_Data = other.m_Data;
 		return *this;
 	}
 
-	Blueberry::String& String::operator=(String&& other) noexcept
+	String& String::operator=(String&& other) noexcept
 	{
 		m_Data = Blueberry::Move(other.m_Data);
 		return *this;
 	}
 
-	Blueberry::String& String::operator=(StringView string_view)
+	String& String::operator=(StringView string_view)
 	{
 		m_Data.SetSizeInternal(0);
 		m_Data.SetSizeUninitialized(string_view.Length() + 1);
@@ -131,7 +141,7 @@ namespace Blueberry {
 		return *this;
 	}
 
-	Blueberry::String& String::operator=(const CharT* string)
+	String& String::operator=(const CharT* string)
 	{
 		m_Data.SetSizeInternal(0);
 		m_Data.SetSizeUninitialized(StringCalls_TCHAR::Length(string) + 1);

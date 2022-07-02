@@ -45,24 +45,20 @@ namespace Blueberry {
 
 	void Logger::Log(Verbosity verbosity, StringView message)
 	{
+		BLUE_CORE_ASSERT((uint8_t)verbosity <= (uint8_t)Verbosity::Fatal);
+
 		if ((uint8_t)verbosity < (uint8_t)s_LoggerData->AllowedVerbosity)
 			return;
 
-		if ((uint8_t)verbosity > (uint8_t)Verbosity::Fatal)
-		{
-			// TODO (Avr): Assert
-			return;
-		}
-
 		static const uint32_t console_flags[] =
 		{
-			0,
-			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_PURPLE_TEXT,
-			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_GRAY_TEXT,
-			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_GREEN_TEXT,
-			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_BRIGHT_YELLOW_TEXT,
-			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_BRIGHT_RED_TEXT,
-			BLUE_CONSOLE_FLAG_RED_BACKGROUND   | BLUE_CONSOLE_FLAG_BRIGHT_WHITE_TEXT
+			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_WHITE_TEXT,         // None
+			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_PURPLE_TEXT,        // Debug
+			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_GRAY_TEXT,          // Trace
+			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_GREEN_TEXT,         // Info
+			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_BRIGHT_YELLOW_TEXT, // Warn
+			BLUE_CONSOLE_FLAG_BLACK_BACKGROUND | BLUE_CONSOLE_FLAG_BRIGHT_RED_TEXT,    // Error
+			BLUE_CONSOLE_FLAG_RED_BACKGROUND   | BLUE_CONSOLE_FLAG_BRIGHT_WHITE_TEXT   // Fatal
 		};
 
 		static const CharT* verbosity_names[] =
@@ -85,7 +81,7 @@ namespace Blueberry {
 			TEXT("[{:02}:{:02}:{:02}]{} BLUEBERRY: {}\n"),
 			time.Hour, time.Minute, time.Second,
 			verbosity_names[(uint8_t)verbosity],
-			message.CStr());
+			*message);
 
 		Platform::SetConsoleFlags(console_flags[(uint8_t)verbosity]);
 		Platform::WriteToConsole({ buffer, (size_t)written.size });
