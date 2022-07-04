@@ -9,12 +9,14 @@
 #include "Core/Application.h"
 #include "Core/Platform.h"
 #include "Core/Memory.h"
+#include "Core/Log.h"
+#include "Core/Filesystem/Filesystem.h"
 
 namespace Blueberry {
 	
 	static bool s_RestartApplication = false;
 
-	inline int32_t BlueberryMain(CharT** cmd_params, uint32_t cmd_params_num)
+	inline int32_t BlueberryMain(CharT** cmd_params, uint32_t cmd_params_count)
 	{
 		if (!Platform::Initialize())
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
@@ -22,21 +24,33 @@ namespace Blueberry {
 		if (!Memory::Initialize(true))
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
 
+		if (!Logger::Initialize())
+			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
+
+		if (!Filesystem::Initialize())
+			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
+
 		int32_t return_code = BLUE_EXIT_CODE_SUCCESS;
+
+		CommandLineArguments command_args;
+		command_args.Arguments = cmd_params;
+		command_args.Count = cmd_params_count;
 
 		do
 		{
 			// Creates the application
-			Application* application = CreateApplication();
+			Application* application = CreateApplication(command_args);
 
 			// Runs the application
-			return_code = application->Run(cmd_params, cmd_params_num);
+			return_code = application->Run(cmd_params, cmd_params_count);
 
 			// Destroys the application
 			delete application;
 		}
 		while (s_RestartApplication);
 
+		Filesystem::Shutdown();
+		Logger::Shutdown();
 		Memory::Shutdown();
 		Platform::Shutdown();
 

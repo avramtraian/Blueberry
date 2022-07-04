@@ -10,17 +10,17 @@ namespace Blueberry {
 	
 	enum WindowFlagsEnum : uint16_t
 	{
-		BLUE_WINDOW_FLAG_NONE       = 0,
-		BLUE_WINDOW_FLAG_FULLSCREEN = 1 << 0,
-		BLUE_WINDOW_FLAG_MAXIMIZED  = 1 << 1,
-		BLUE_WINDOW_FLAG_MINIMIZED  = 1 << 2,
-		BLUE_WINDOW_FLAG_FIXED_SIZE = 1 << 3,
+		WINDOW_FLAG_None       = 0,
+		WINDOW_FLAG_Fullscreen = BIT(0),
+		WINDOW_FLAG_Maximized  = BIT(1),
+		WINDOW_FLAG_Minimized  = BIT(2),
+		WINDOW_FLAG_FixedSize  = BIT(3),
 	};
 	using WindowFlags = uint16_t;
 
 	using PFN_WindowCallaback = void(*)(const class Window*, Event&);
 
-	struct WindowData
+	struct WindowSpecification
 	{
 		uint32_t            Width         = 400;
 		uint32_t            Height        = 400;
@@ -28,22 +28,22 @@ namespace Blueberry {
 		int32_t             PositionY     = 100;
 		String              Title         = TEXT("Blueberry Window");
 		bool                IsPrimary     = false;
-		WindowFlags         Flags         = BLUE_WINDOW_FLAG_NONE;
+		WindowFlags         Flags         = WINDOW_FLAG_None;
 		PFN_WindowCallaback EventCallback = nullptr;
 	};
 
 	enum WindowErrorCodesEnum : uint16_t
 	{
-		BLUE_WINDOW_ERROR_CODE_NONE                      = 0,
-		BLUE_WINDOW_ERROR_CODE_UNKNOWN                   = 1,
-		BLUE_WINDOW_ERROR_CODE_INVALID_FLAGS_COMBINATION = 2,
+		WINDOW_ERROR_CODE_None                    = 0x00,
+		WINDOW_ERROR_CODE_Unknown                 = 0x01,
+		WINDOW_ERROR_CODE_InvalidFlagsCombination = 0x02,
 	};
 	using WindowErrorCode = uint16_t;
 
 	class BLUEBERRY_API Window
 	{
 	public:
-		static Window* Create(const WindowData& data);
+		static Window* Create(const WindowSpecification& spec);
 
 		~Window();
 
@@ -53,13 +53,13 @@ namespace Blueberry {
 		Window& operator=(Window&&) noexcept = delete;
 
 	public:
-		WindowData& GetData() { return m_Data; }
+		WindowSpecification& GetData() { return m_Specification; }
 
-		const WindowData& GetData() const { return m_Data; }
+		const WindowSpecification& GetData() const { return m_Specification; }
 
 		void* GetNativeHandle() const { return m_NativeHandle; }
 
-		bool IsPrimary() const { return m_Data.IsPrimary; }
+		bool IsPrimary() const { return m_Specification.IsPrimary; }
 
 		bool ShouldClose() const { return m_ShouldClose; }
 
@@ -78,19 +78,19 @@ namespace Blueberry {
 
 		void Maximize();
 
-		void MessageLoop();
+		void ProcessMessages();
 
 	private:
-		Window(const WindowData& data);
+		Window(const WindowSpecification& data);
 
 	private:
-		WindowData m_Data;
+		WindowSpecification m_Specification;
 
 		void* m_NativeHandle;
 
 		bool m_ShouldClose = false;
 
-		WindowErrorCode m_ErrorCode = BLUE_WINDOW_ERROR_CODE_NONE;
+		WindowErrorCode m_ErrorCode = WINDOW_ERROR_CODE_None;
 	};
 
 }

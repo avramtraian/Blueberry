@@ -76,6 +76,8 @@
 
 #define BLUE_ARRAY_LENGTH(Arr)    (sizeof(Arr) / sizeof(Arr[0]))
 
+#define BIT(X) (1 << (X))
+
 namespace Blueberry {
 
 	using SizeT    = uint64_t;

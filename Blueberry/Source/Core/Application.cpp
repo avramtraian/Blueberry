@@ -20,41 +20,37 @@ namespace Blueberry {
 
 	Blueberry::Application* Application::s_Instance = nullptr;
 
-	Application::Application(const ApplicationInfo& info)
-		: m_Info(info)
+	Application::Application(const ApplicationSpecification& spec)
+		: m_Specification(spec)
 	{
 		if (s_Instance)
-		{
 			return;
-		}
-
 		s_Instance = this;
+
+		Input::Initialize();
+
+		WindowSpecification window_spec;
+		window_spec.EventCallback = Application::OnEvent;
+		window_spec.Title = m_Specification.WindowTitle;
+		window_spec.IsPrimary = true;
+		window_spec.Flags = WINDOW_FLAG_Maximized;
+
+		Window::Create(window_spec);
 	}
 
 	Application::~Application()
 	{
 		if (s_Instance != this)
-		{
 			return;
-		}
+
+		Input::Shutdown();
 
 		s_Instance = nullptr;
 	}
 
-	int32_t Application::Run(CharT** cmd_params, uint32_t cmd_params_num)
+	int32_t Application::Run(CharT** cmd_params, uint32_t cmd_params_count)
 	{
 		m_IsRunning = true;
-
-		if (!Logger::Initialize())
-			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
-
-		if (!Filesystem::Initialize())
-			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
-
-		if (!Input::Initialize())
-			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
-
-		Window::Create(m_Info.PrimaryWindow);
 
 		for (Layer* layer : m_Layers)
 			layer->OnAttach();
@@ -71,7 +67,7 @@ namespace Blueberry {
 			float delta_time = ts.Seconds();
 
 			for (Window* window : m_Windows)
-				window->MessageLoop();
+				window->ProcessMessages();
 
 			for (Layer* layer : m_Layers)
 				layer->Tick(delta_time);
@@ -110,10 +106,6 @@ namespace Blueberry {
 		for (auto& window : m_Windows)
 			delete window;
 		m_Windows.Clear();
-
-		Input::Shutdown();
-		Filesystem::Shutdown();
-		Logger::Shutdown();
 
 		return BLUE_EXIT_CODE_SUCCESS;
 	}

@@ -21,8 +21,8 @@ namespace Blueberry { namespace Filesystem {
 
 	BLUEBERRY_API ErrorCode FileRename(const Path& filepath, StringView new_filename);
 
-	bool Initialize();
+	BLUEBERRY_API bool Initialize();
 
-	void Shutdown();
+	BLUEBERRY_API void Shutdown();
 
 } }

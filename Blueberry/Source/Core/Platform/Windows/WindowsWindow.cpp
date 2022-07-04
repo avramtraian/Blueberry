@@ -14,9 +14,9 @@
 
 namespace Blueberry {
 
-	Window* Window::Create(const WindowData& data)
+	Window* Window::Create(const WindowSpecification& spec)
 	{
-		return new Window(data);
+		return new Window(spec);
 	}
 
 	static LRESULT BlueberryWindowProcedure(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -39,13 +39,13 @@ namespace Blueberry {
 			wnd_class.hIconSm     = NULL;
 
 			wnd_class.lpszClassName = BLUE_WINDOW_CLASS_NAME;
-			wnd_class.cbSize = sizeof(WNDCLASSEX);
-			wnd_class.hCursor = NULL;
+			wnd_class.cbSize        = sizeof(WNDCLASSEX);
+			wnd_class.hCursor       = NULL;
 			wnd_class.hbrBackground = NULL;
-			wnd_class.cbWndExtra = 0;
-			wnd_class.cbClsExtra = 0;
-			wnd_class.lpszMenuName = NULL;
-			wnd_class.style = 0;
+			wnd_class.cbWndExtra    = 0;
+			wnd_class.cbClsExtra    = 0;
+			wnd_class.lpszMenuName  = NULL;
+			wnd_class.style         = 0;
 
 			RegisterClassEx(&wnd_class);
 		}
@@ -59,7 +59,7 @@ namespace Blueberry {
 		{
 			out_ex_style_flags = 0;
 
-			if (flags & BLUE_WINDOW_FLAG_FULLSCREEN)
+			if (flags & WINDOW_FLAG_Fullscreen)
 			{
 				out_style_flags = WS_POPUP | WS_MAXIMIZE;
 				out_show_mode = SW_SHOWMAXIMIZED;
@@ -69,16 +69,16 @@ namespace Blueberry {
 				out_style_flags = WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 				out_show_mode = SW_SHOW;
 
-				if (!(flags & BLUE_WINDOW_FLAG_FIXED_SIZE))
+				if (!(flags & WINDOW_FLAG_FixedSize))
 				{
 					out_style_flags |= WS_THICKFRAME | WS_MAXIMIZEBOX;
 				}
-				if (flags & BLUE_WINDOW_FLAG_MAXIMIZED)
+				if (flags & WINDOW_FLAG_Maximized)
 				{
 					out_style_flags |= WS_MAXIMIZE;
 					out_show_mode = SW_SHOWMAXIMIZED;
 				}
-				if (flags & BLUE_WINDOW_FLAG_MINIMIZED)
+				if (flags & WINDOW_FLAG_Minimized)
 				{
 					out_style_flags |= WS_MINIMIZE;
 					out_show_mode = SW_SHOWMINIMIZED;
@@ -102,8 +102,8 @@ namespace Blueberry {
 
 	}
 
-	Window::Window(const WindowData& data)
-		: m_Data(data)
+	Window::Window(const WindowSpecification& spec)
+		: m_Specification(spec)
 		, m_NativeHandle(nullptr)
 	{
 		// First time a window is created, the window class is registered
@@ -114,9 +114,9 @@ namespace Blueberry {
 			registered_window_class = true;
 		}
 
-		if (!Utils::ValidateWindowFlags(m_Data.Flags))
+		if (!Utils::ValidateWindowFlags(m_Specification.Flags))
 		{
-			m_ErrorCode = BLUE_WINDOW_ERROR_CODE_INVALID_FLAGS_COMBINATION;
+			m_ErrorCode = WINDOW_ERROR_CODE_InvalidFlagsCombination;
 			BLUB_CORE_ERROR(TEXT("Invalid combination of window flags!"));
 			return;
 		}
@@ -125,18 +125,18 @@ namespace Blueberry {
 		DWORD ex_style_flags;
 		int show_mode;
 
-		Utils::TranslateWindowFlags(m_Data.Flags, style_flags, ex_style_flags, show_mode);
+		Utils::TranslateWindowFlags(m_Specification.Flags, style_flags, ex_style_flags, show_mode);
 
-		int width  = m_Data.Width;
-		int height = m_Data.Height;
-		int x_pos  = m_Data.PositionX;
-		int y_pos  = m_Data.PositionY;
+		int width  = m_Specification.Width;
+		int height = m_Specification.Height;
+		int x_pos  = m_Specification.PositionX;
+		int y_pos  = m_Specification.PositionY;
 
 		Utils::s_CreatingWindow = this;
 
 		HWND window_hwnd = CreateWindowEx(
 			ex_style_flags, Utils::BLUE_WINDOW_CLASS_NAME,
-			m_Data.Title.CStr(),
+			m_Specification.Title.CStr(),
 			style_flags,
 			x_pos, y_pos, width, height,
 			NULL, NULL, Utils::s_ProcessHandle, NULL);
@@ -145,7 +145,7 @@ namespace Blueberry {
 
 		if (window_hwnd == NULL)
 		{
-			m_ErrorCode = BLUE_WINDOW_ERROR_CODE_UNKNOWN;
+			m_ErrorCode = WINDOW_ERROR_CODE_Unknown;
 			BLUB_CORE_ERROR(TEXT("Window creation failed!"));
 			return;
 		}
@@ -163,11 +163,11 @@ namespace Blueberry {
 
 	void Window::SetTitle(StringView title)
 	{
-		m_Data.Title = title;
+		m_Specification.Title = title;
 		SetWindowText((HWND)m_NativeHandle, title.CStr());
 
-		WindowTitleChangedEvent e(m_Data.Title);
-		m_Data.EventCallback(this, e);
+		WindowTitleChangedEvent e(m_Specification.Title);
+		m_Specification.EventCallback(this, e);
 	}
 
 	void Window::SetSize(uint32_t width, uint32_t height)
@@ -190,7 +190,7 @@ namespace Blueberry {
 		ShowWindow((HWND)m_NativeHandle, SW_SHOWMAXIMIZED);
 	}
 
-	void Window::MessageLoop()
+	void Window::ProcessMessages()
 	{
 		MSG window_msg;
 		while (PeekMessage(&window_msg, (HWND)m_NativeHandle, 0, 0, PM_REMOVE))

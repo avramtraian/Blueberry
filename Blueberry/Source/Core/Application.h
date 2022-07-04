@@ -11,17 +11,40 @@
 
 namespace Blueberry {
 
-	struct ApplicationInfo
+	/**
+	* Holds the command line arguments.
+	*/
+	struct CommandLineArguments
 	{
-		const CharT* ApplicationName;
+		// The list of command line arguments.
+		CharT** Arguments = nullptr;
 
-		WindowData   PrimaryWindow;
+		// The count of the command line arguments.
+		uint32_t Count = 0;
+	};
+
+	/**
+	* Specifies the Application behavior.
+	*/
+	struct ApplicationSpecification
+	{
+		// The application name.
+		String Name;
+
+		// The application initial working directory.
+		String WorkingDirectory;
+
+		// The primary window's title.
+		String WindowTitle;
+
+		// The command line arguments.
+		CommandLineArguments CommandLineArgs;
 	};
 
 	class BLUEBERRY_API Application
 	{
 	public:
-		Application(const ApplicationInfo& info);
+		Application(const ApplicationSpecification& spec);
 		virtual ~Application();
 
 	public:
@@ -30,7 +53,7 @@ namespace Blueberry {
 		static void OnEvent(const Window* window, Event& e);
 
 	public:
-		int32_t Run(CharT** cmd_params, uint32_t cmd_params_num);
+		int32_t Run(CharT** cmd_params, uint32_t cmd_params_count);
 
 		void AddLayer(Layer* layer);
 
@@ -38,19 +61,26 @@ namespace Blueberry {
 
 		void AddWindow(Window* window);
 
-	private:
-		static Application* s_Instance;
+		/**
+		* Retrieves the application specification.
+		* 
+		* @returns The application specification.
+		*/
+		const ApplicationSpecification& GetSpecification() const { return m_Specification; }
 
 	private:
-		ApplicationInfo m_Info;
+		ApplicationSpecification m_Specification;
 
 		bool m_IsRunning = false;
 
 		Vector<Layer*> m_Layers;
 
 		Vector<Window*> m_Windows;
+
+	private:
+		static Application* s_Instance;
 	};
 
-	Application* CreateApplication();
+	Application* CreateApplication(const CommandLineArguments& command_args);
 
 }
