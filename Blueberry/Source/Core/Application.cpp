@@ -7,6 +7,7 @@
 
 #include "Platform.h"
 #include "Log.h"
+#include "Filesystem/Filesystem.h"
 #include "Input.h"
 
 #include "Time.h"
@@ -45,6 +46,9 @@ namespace Blueberry {
 		m_IsRunning = true;
 
 		if (!Logger::Initialize())
+			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
+
+		if (!Filesystem::Initialize())
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
 
 		if (!Input::Initialize())
@@ -108,6 +112,7 @@ namespace Blueberry {
 		m_Windows.Clear();
 
 		Input::Shutdown();
+		Filesystem::Shutdown();
 		Logger::Shutdown();
 
 		return BLUE_EXIT_CODE_SUCCESS;

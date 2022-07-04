@@ -20,7 +20,7 @@ namespace Blueberry {
 
 	public:
 		static void Copy(void* destination, const void* source, SizeT copy_size);
-		static void Set(void* destination, int value, SizeT set_size);
+		static void Set(void* destination, ByteT value, SizeT set_size);
 		static void Zero(void* destination, SizeT zero_size);
 
 	public:

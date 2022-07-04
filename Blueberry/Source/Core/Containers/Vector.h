@@ -297,7 +297,7 @@ namespace Blueberry {
 			if (m_Size + num > m_Capacity)
 				ReAllocate(NextCapacity(m_Size + num));
 
-			Memory::Set(m_Data + m_Size, 0, num * sizeof(ElementType));
+			Memory::Zero(m_Data + m_Size, num * sizeof(ElementType));
 
 			m_Size += num;
 			return m_Size - num;
@@ -517,7 +517,7 @@ namespace Blueberry {
 				ReAllocate(NextCapacity(new_size));
 
 			if (new_size > m_Size)
-				Memory::Zero(m_Data + m_Size, new_size - m_Size);
+				Memory::Zero(m_Data + m_Size, (new_size - m_Size) * sizeof(ElementType));
 
 			for (SizeT index = new_size; index < m_Size; index++)
 				m_Data[index].~ElementType();

@@ -83,7 +83,7 @@ namespace Blueberry {
 		memcpy(destination, source, (size_t)copy_size);
 	}
 
-	void Memory::Set(void* destination, int value, SizeT set_size)
+	void Memory::Set(void* destination, ByteT value, SizeT set_size)
 	{
 		memset(destination, value, (size_t)set_size);
 	}
