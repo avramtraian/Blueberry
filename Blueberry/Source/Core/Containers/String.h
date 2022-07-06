@@ -7,7 +7,7 @@
 
 #include "Vector.h"
 
-namespace Blueberry { namespace StringCalls_TCHAR {
+namespace Blueberry { namespace StringCalls {
 
 	BLUEBERRY_API BLUE_NODISCARD size_t Length(const CharT* string);
 

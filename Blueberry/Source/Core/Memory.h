@@ -10,13 +10,9 @@ namespace Blueberry {
 	class BLUEBERRY_API Memory
 	{
 	public:
-		static bool Initialize(bool enable_profiling_tools);
+		static bool Initialize(const struct CommandLineArguments& cmd_line_args);
 
 		static void Shutdown();
-
-		static void EnableMemoryProfiling();
-
-		static void DisableMemoryProfiling();
 
 	public:
 		static void Copy(void* destination, const void* source, SizeT copy_size);

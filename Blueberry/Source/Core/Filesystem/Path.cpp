@@ -31,7 +31,7 @@ namespace Blueberry { namespace Filesystem {
 
 	Path::Path(const CharT* other)
 	{
-		SizeT other_length = StringCalls_TCHAR::Length(other);
+		SizeT other_length = StringCalls::Length(other);
 		m_Data.SetSizeUninitialized(other_length + 1);
 		Memory::Copy(m_Data.Data(), other, (other_length + 1) * sizeof(CharT));
 	}
@@ -73,7 +73,7 @@ namespace Blueberry { namespace Filesystem {
 
 	Path& Path::operator=(const CharT* other)
 	{
-		SizeT other_length = StringCalls_TCHAR::Length(other);
+		SizeT other_length = StringCalls::Length(other);
 		m_Data.SetSizeInternal(0);
 		m_Data.SetSizeUninitialized(other_length + 1);
 		Memory::Copy(m_Data.Data(), other, (other_length + 1) * sizeof(CharT));

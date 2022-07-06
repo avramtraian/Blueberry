@@ -4,39 +4,39 @@
 #include "Memory.h"
 
 #include "Core/Platform.h"
+#include "Core/Application.h"
 #include "Profiling/MemoryProfiler.h"
 
 namespace Blueberry {
 
 	struct MemoryData
 	{
-#if BLUE_DISABLE_MEMORY_PROFILING
-		static constexpr bool EnableProfilingTools = false;
-#else
-		static inline    bool EnableProfilingTools = true;
-#endif
+
 	};
 	static MemoryData* s_MemoryData = nullptr;
 
-	bool Memory::Initialize(bool enable_profiling_tools)
+	bool Memory::Initialize(const CommandLineArguments& cmd_line_args)
 	{
 		if (s_MemoryData)
 			return false;
-
-#if !BLUE_DISABLE_MEMORY_PROFILING
-		MemoryData::EnableProfilingTools = enable_profiling_tools;
-#endif
 
 		s_MemoryData = (MemoryData*)Platform::Allocate(sizeof(MemoryData));
 		if (!s_MemoryData)
 			return false;
 		new (s_MemoryData) MemoryData();
 
-		if (MemoryData::EnableProfilingTools)
+#if BLUE_ENABLE_MEMORY_PROFILING
+		MemoryProfiler::Initialize();
+
+		for (SizeT index = 1; index < cmd_line_args.Count; index++)
 		{
-			if (!MemoryProfiler::Initialize())
-				return false;
+			if (StringCalls::Equals(cmd_line_args[index], TEXT("-mprof")))
+			{
+				MemoryProfiler::Enable();
+				break;
+			}
 		}
+#endif
 
 		return true;
 	}
@@ -46,36 +46,13 @@ namespace Blueberry {
 		if (!s_MemoryData)
 			return;
 
-		if (MemoryData::EnableProfilingTools)
-		{
-			MemoryProfiler::Shutdown();
-		}
+#if BLUE_ENABLE_MEMORY_PROFILING
+		MemoryProfiler::Shutdown();
+#endif
 
 		s_MemoryData->~MemoryData();
 		Platform::Free(s_MemoryData);
 		s_MemoryData = nullptr;
-	}
-
-	void Memory::EnableMemoryProfiling()
-	{
-#if !BLUE_DISABLE_MEMORY_PROFILING
-		if (!MemoryData::EnableProfilingTools)
-		{
-			MemoryData::EnableProfilingTools = true;
-			MemoryProfiler::Initialize();
-		}
-#endif
-	}
-
-	void Memory::DisableMemoryProfiling()
-	{
-#if !BLUE_DISABLE_MEMORY_PROFILING
-		if (MemoryData::EnableProfilingTools)
-		{
-			MemoryData::EnableProfilingTools = false;
-			MemoryProfiler::Shutdown();
-		}
-#endif
 	}
 
 	void Memory::Copy(void* destination, const void* source, SizeT copy_size)
@@ -105,10 +82,12 @@ namespace Blueberry {
 	{
 		void* memory_block = AllocateRaw(block_size);
 
-		if (s_MemoryData->EnableProfilingTools)
+#if BLUE_ENABLE_MEMORY_PROFILING
+		if (MemoryProfiler::IsEnabled())
 		{
 			MemoryProfiler::TrackAllocation(memory_block, block_size, TEXT("Unknown"), TEXT("Unknown"), 0);
 		}
+#endif
 
 		return memory_block;
 	}
@@ -117,10 +96,12 @@ namespace Blueberry {
 	{
 		void* memory_block = AllocateRaw(block_size);
 
-		if (s_MemoryData->EnableProfilingTools)
+#if BLUE_ENABLE_MEMORY_PROFILING
+		if (MemoryProfiler::IsEnabled())
 		{
 			MemoryProfiler::TrackAllocation(memory_block, block_size, file, function_sig, line);
 		}
+#endif
 
 		return memory_block;
 	}
@@ -135,10 +116,12 @@ namespace Blueberry {
 
 	void Memory::Free(void* memory_block)
 	{
-		if (s_MemoryData->EnableProfilingTools)
+#if BLUE_ENABLE_MEMORY_PROFILING
+		if (MemoryProfiler::IsEnabled())
 		{
 			MemoryProfiler::TrackDeallocation(memory_block);
 		}
+#endif
 
 		FreeRaw(memory_block);
 	}

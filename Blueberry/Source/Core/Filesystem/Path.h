@@ -87,7 +87,7 @@ namespace Blueberry { namespace Filesystem {
 
 		PathView(const CharT* other)
 			: m_Data(other)
-			, m_Length(StringCalls_TCHAR::Length(other))
+			, m_Length(StringCalls::Length(other))
 		{}
 
 		PathView(const CharT* other, SizeT other_length)
@@ -108,7 +108,7 @@ namespace Blueberry { namespace Filesystem {
 		PathView& operator=(const CharT* other)
 		{
 			m_Data = other;
-			m_Length = StringCalls_TCHAR::Length(other);
+			m_Length = StringCalls::Length(other);
 			return *this;
 		}
 

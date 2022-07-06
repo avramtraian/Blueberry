@@ -3,7 +3,7 @@
 
 #include "String.h"
 
-namespace Blueberry { namespace StringCalls_TCHAR {
+namespace Blueberry { namespace StringCalls {
 
 	size_t Length(const CharT* string)
 	{
@@ -14,12 +14,17 @@ namespace Blueberry { namespace StringCalls_TCHAR {
 
 	bool Equals(const CharT* string_a, const CharT* string_b)
 	{
-		while (*(string_a++) && *(string_b++))
+		while (true)
 		{
-			if (*string_a != *string_b)
+			CharT a = *(string_a++);
+			CharT b = *(string_b++);
+
+			if (a == 0 || b == 0)
+				return a == b;
+
+			if (a != b)
 				return false;
 		}
-		return (*string_a == *string_b);
 	}
 
 } }
@@ -38,7 +43,7 @@ namespace Blueberry {
 
 	StringView::StringView(const CharT* string)
 		: m_Data(string)
-		, m_Length(StringCalls_TCHAR::Length(string))
+		, m_Length(StringCalls::Length(string))
 	{}
 
 	StringView::StringView(const CharT* string, SizeT string_length)
@@ -69,7 +74,7 @@ namespace Blueberry {
 	{
 
 		m_Data = string;
-		m_Length = StringCalls_TCHAR::Length(string);
+		m_Length = StringCalls::Length(string);
 		return *this;
 	}
 
@@ -98,7 +103,7 @@ namespace Blueberry {
 
 	String::String(const CharT* string)
 	{
-		m_Data.SetSizeUninitialized(StringCalls_TCHAR::Length(string) + 1);
+		m_Data.SetSizeUninitialized(StringCalls::Length(string) + 1);
 		Memory::Copy(m_Data.Data(), string, m_Data.Size() * sizeof(CharT));
 	}
 
@@ -179,7 +184,7 @@ namespace Blueberry {
 	String& String::operator=(const CharT* string)
 	{
 		m_Data.SetSizeInternal(0);
-		m_Data.SetSizeUninitialized(StringCalls_TCHAR::Length(string) + 1);
+		m_Data.SetSizeUninitialized(StringCalls::Length(string) + 1);
 		Memory::Copy(m_Data.Data(), string, m_Data.Size() * sizeof(CharT));
 
 		return *this;

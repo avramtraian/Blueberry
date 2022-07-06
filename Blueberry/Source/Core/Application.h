@@ -21,6 +21,8 @@ namespace Blueberry {
 
 		// The count of the command line arguments.
 		uint32_t Count = 0;
+
+		const CharT* operator[](SizeT index) const { return Arguments[index]; }
 	};
 
 	/**

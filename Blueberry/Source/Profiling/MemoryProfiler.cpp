@@ -16,6 +16,10 @@ namespace Blueberry {
 
 	struct MemoryProfilerData
 	{
+#if BLUE_ENABLE_MEMORY_PROFILING
+		static inline bool IsEnabled = false;
+#endif
+
 		HashTable<void*,        AllocationInfo,          UntrackedAllocator> Allocations;
 		HashTable<const CharT*, FileMemoryProfilingInfo, UntrackedAllocator> FilesProfilingInfo;
 	};
@@ -39,14 +43,40 @@ namespace Blueberry {
 		if (!s_MemoryProfilerData)
 			return;
 
+		Disable();
 		s_MemoryProfilerData->~MemoryProfilerData();
 		Platform::Free(s_MemoryProfilerData);
 
 		s_MemoryProfilerData = nullptr;
 	}
 
+	bool MemoryProfiler::IsEnabled()
+	{
+#if BLUE_ENABLE_MEMORY_PROFILING
+		return MemoryProfilerData::IsEnabled;
+#else
+		return false;
+#endif
+	}
+
+	void MemoryProfiler::Enable()
+	{
+#if BLUE_ENABLE_MEMORY_PROFILING
+		MemoryProfilerData::IsEnabled = true;
+#endif
+	}
+
+	void MemoryProfiler::Disable()
+	{
+#if BLUE_ENABLE_MEMORY_PROFILING
+		MemoryProfilerData::IsEnabled = false;
+#endif
+	}
+
 	void MemoryProfiler::TrackAllocation(void* memory_block, SizeT block_size, const CharT* file, const CharT* function_sig, uint32_t line)
 	{
+		BLUE_CORE_ASSERT(IsEnabled());
+
 		if (memory_block == nullptr)
 			return;
 
@@ -67,10 +97,17 @@ namespace Blueberry {
 
 	void MemoryProfiler::TrackDeallocation(void* memory_block)
 	{
+		BLUE_CORE_ASSERT(IsEnabled());
+
 		if (memory_block == nullptr)
 			return;
 
 		SizeT allocation_info_index = s_MemoryProfilerData->Allocations.Find(memory_block);
+
+		// The allocation might have been done when the memory profiler wasn't enabled.
+		if (allocation_info_index == BLUE_INVALID_SIZE)
+			return;
+
 		auto& allocation_info = s_MemoryProfilerData->Allocations.Entries()[allocation_info_index].B;
 
 		auto& file_profiling = s_MemoryProfilerData->FilesProfilingInfo[allocation_info.File];

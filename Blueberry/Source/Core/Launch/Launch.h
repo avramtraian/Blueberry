@@ -18,10 +18,14 @@ namespace Blueberry {
 
 	inline int32_t BlueberryMain(CharT** cmd_params, uint32_t cmd_params_count)
 	{
+		CommandLineArguments command_args;
+		command_args.Arguments = cmd_params;
+		command_args.Count = cmd_params_count;
+
 		if (!Platform::Initialize())
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
 
-		if (!Memory::Initialize(true))
+		if (!Memory::Initialize(command_args))
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
 
 		if (!Logger::Initialize())
@@ -31,10 +35,6 @@ namespace Blueberry {
 			return BLUE_EXIT_CODE_INITIALIZE_FAILED;
 
 		int32_t return_code = BLUE_EXIT_CODE_SUCCESS;
-
-		CommandLineArguments command_args;
-		command_args.Arguments = cmd_params;
-		command_args.Count = cmd_params_count;
 
 		do
 		{
