@@ -58,8 +58,6 @@ namespace Blueberry { namespace Filesystem {
 		
 		ErrorCode WriteText(StringView text, SizeT* out_written_chars = nullptr);
 
-		void SetFlags(FileFlags new_flags);
-
 	private:
 		void* m_NativeFileHandle;
 		FileFlags m_FileFlags;

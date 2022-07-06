@@ -25,7 +25,7 @@ namespace Blueberry { namespace Filesystem {
 		if (!s_Filesystem)
 			return false;
 
-		CharT wd_buffer[512];
+		static CharT wd_buffer[1024];
 		SizeT wd_length = (SizeT)GetCurrentDirectory(BLUE_ARRAY_LENGTH(wd_buffer), wd_buffer);
 		if (wd_length == 0)
 			return false;
@@ -68,6 +68,7 @@ namespace Blueberry { namespace Filesystem {
 				case ERROR_FILE_NOT_FOUND: return FILESYSTEM_ERROR_FILE_NOT_FOUND;
 			}
 
+			DWORD ec = GetLastError();
 			return FILESYSTEM_ERROR_UNKNOWN;
 		}
 
@@ -88,6 +89,7 @@ namespace Blueberry { namespace Filesystem {
 				case ERROR_FILE_NOT_FOUND: return FILESYSTEM_ERROR_FILE_NOT_FOUND;
 			}
 
+			DWORD ec = GetLastError();
 			return FILESYSTEM_ERROR_UNKNOWN;
 		}
 
@@ -108,6 +110,7 @@ namespace Blueberry { namespace Filesystem {
 				case ERROR_FILE_NOT_FOUND: return FILESYSTEM_ERROR_FILE_NOT_FOUND;
 			}
 
+			DWORD ec = GetLastError();
 			return FILESYSTEM_ERROR_UNKNOWN;
 		}
 
@@ -162,7 +165,7 @@ namespace Blueberry { namespace Filesystem {
 
 		// Creating the file handle.
 		HANDLE file_handle = CreateFile(
-			*filepath,
+			*GetAbsolutePath(filepath),
 			access_flags,
 			share_mode,
 			NULL,
@@ -332,7 +335,7 @@ namespace Blueberry { namespace Filesystem {
 
 		// Creating the file handle.
 		HANDLE file_handle = CreateFile(
-			*filepath,
+			*GetAbsolutePath(filepath),
 			access_flags,
 			share_mode,
 			NULL,
@@ -404,11 +407,6 @@ namespace Blueberry { namespace Filesystem {
 		}
 
 		return Write(text.Data(), (text.Length() + 1) * sizeof(CharT), out_written_chars);
-	}
-
-	void OutputFileStream::SetFlags(FileFlags new_flags)
-	{
-
 	}
 
 } }
