@@ -119,6 +119,41 @@ namespace Blueberry {
 		return CStr();
 	}
 
+	CharT& String::Front()
+	{
+		return m_Data.Front();
+	}
+
+	const CharT& String::Front() const
+	{
+		return m_Data.Front();
+	}
+
+	CharT& String::Back()
+	{
+		return m_Data.Back();
+	}
+
+	const CharT& String::Back() const
+	{
+		return m_Data.Back();
+	}
+
+	void String::PushChar(CharT ch)
+	{
+		m_Data.Add(ch);
+	}
+
+	void String::SetCapacity(SizeT new_capacity)
+	{
+		m_Data.SetCapacity(new_capacity);
+	}
+
+	void String::SetSizeInternal(SizeT new_size)
+	{
+		m_Data.SetSizeInternal(new_size);
+	}
+
 	String& String::operator=(const String& other)
 	{
 		m_Data = other.m_Data;

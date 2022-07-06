@@ -93,6 +93,19 @@ namespace Blueberry{
 
 		bool IsEmpty() const { return (Length() == 1); }
 
+	public:
+		CharT& Front();
+		const CharT& Front() const;
+
+		CharT& Back();
+		const CharT& Back() const;
+
+		void PushChar(CharT ch);
+
+		void SetCapacity(SizeT new_capacity);
+
+		void SetSizeInternal(SizeT new_size);
+
 	private:
 		Vector<CharT, HeapAllocator> m_Data;
 	};

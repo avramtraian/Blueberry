@@ -13,6 +13,8 @@ namespace Blueberry { namespace Filesystem {
 
 	BLUEBERRY_API void SetWorkingDirectory(PathView new_working_directory);
 
+	BLUEBERRY_API Path GetAbsolutePath(PathView filepath);
+
 	BLUEBERRY_API ErrorCode FileDelete(PathView filepath);
 
 	BLUEBERRY_API ErrorCode FileCopy(PathView src_filepath, PathView dest_filepath);

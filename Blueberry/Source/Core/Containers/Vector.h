@@ -544,6 +544,14 @@ namespace Blueberry {
 			m_Size = new_size;
 		}
 
+		void SetCapacity(SizeT new_capacity)
+		{
+			if (new_capacity == m_Capacity)
+				return;
+
+			ReAllocate(new_capacity);
+		}
+
 		void Clear()
 		{
 			for (SizeT index = 0; index < m_Size; index++)
