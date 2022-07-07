@@ -66,7 +66,7 @@ namespace Blueberry { namespace Math {
 	{
 		int64_t result = 1;
 
-		for (int64_t index = 0; index < exp; index++)
+		for (uint64_t index = 0; index < exp; index++)
 			result *= base;
 
 		return result;
