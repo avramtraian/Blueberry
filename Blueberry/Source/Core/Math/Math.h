@@ -84,34 +84,36 @@ namespace Blueberry { namespace Math {
 	BLUEBERRY_API float Atan(float x);
 	BLUEBERRY_API double AtanD(double x);
 
-	BLUE_FORCEINLINE constexpr float Deg(float rad)
+	BLUE_FORCEINLINE constexpr float Degrees(float rad)
 	{
 		return rad * RAD_TO_DEG;
 	}
 
-	BLUE_FORCEINLINE constexpr double DegD(double rad)
+	BLUE_FORCEINLINE constexpr double DegreesD(double rad)
 	{
 		return rad * RAD_TO_DEG;
 	}
 
-	BLUE_FORCEINLINE constexpr float Rad(float deg)
+	BLUE_FORCEINLINE constexpr float Radians(float deg)
 	{
 		return deg * DEG_TO_RAD;
 	}
 
-	BLUE_FORCEINLINE constexpr double RadD(double deg)
+	BLUE_FORCEINLINE constexpr double RadiansD(double deg)
 	{
 		return deg * DEG_TO_RAD;
 	}
 
 	BLUE_FORCEINLINE constexpr bool IsNearlyEqual(float x, float y, float error_tolerance)
 	{
-		return (Absolute(x - y) <= error_tolerance);
+		float d = x - y;
+		return -error_tolerance <= d && d <= error_tolerance;
 	}
 
 	BLUE_FORCEINLINE constexpr bool IsNearlyEqualD(double x, double y, double error_tolerance)
 	{
-		return (Absolute(x - y) <= error_tolerance);
+		double d = x - y;
+		return -error_tolerance <= d && d <= error_tolerance;
 	}
 
 } }
