@@ -7,12 +7,12 @@
 
 namespace Blueberry {
 
-	template<typename T>
+	template<typename T, typename Q>
 	struct Vector2t;
-	template<typename T>
+	template<typename T, typename Q>
 	struct Vector4t;
 
-	template<typename T>
+	template<typename T, typename Q>
 	struct Vector3t
 	{
 	public:
@@ -21,9 +21,9 @@ namespace Blueberry {
 			return (v.X * v.X) + (v.Y * v.Y) + (v.Z * v.Z);
 		}
 
-		static T Length(const Vector3t& v)
+		static Q Length(const Vector3t& v)
 		{
-			return Math::SquareRoot(Vector3t::LengthSquared(v));
+			return (Q)Mathd::SquareRoot((double)Vector3t::LengthSquared(v));
 		}
 
 		static T DistanceSquared(const Vector3t& v1, const Vector3t& v2)
@@ -34,18 +34,18 @@ namespace Blueberry {
 			return (x * x) + (y * y) + (z * z);
 		}
 
-		static T Distance(const Vector3t& v1, const Vector3t& v2)
+		static Q Distance(const Vector3t& v1, const Vector3t& v2)
 		{
-			return Math::SquareRoot(Vector3t::DistanceSquared(v1, v2));
+			return (Q)Mathd::SquareRoot((double)Vector3t::DistanceSquared(v1, v2));
 		}
 
 		static Vector3t Normalize(const Vector3t& v)
 		{
-			T one_over_length = (T)1 / Vector3t::Length(v);
+			Q one_over_length = (Q)1 / Vector3t::Length(v);
 			return Vector3t(
-				v.X * one_over_length,
-				v.Y * one_over_length,
-				v.Z * one_over_length
+				(T)((Q)v.X * one_over_length),
+				(T)((Q)v.Y * one_over_length),
+				(T)((Q)v.Z * one_over_length)
 			);
 		}
 
@@ -81,10 +81,10 @@ namespace Blueberry {
 		{}
 
 		// Definition is in 'VectorCommon.h'.
-		Vector3t(const Vector2t<T>& v2);
+		Vector3t(const Vector2t<T, Q>& v2);
 
 		// Definition is in 'VectorCommon.h'.
-		Vector3t(const Vector4t<T>& v4);
+		Vector3t(const Vector4t<T, Q>& v4);
 
 	public:
 		Vector3t& operator=(const Vector3t& other)
@@ -96,10 +96,10 @@ namespace Blueberry {
 		}
 
 		// Definition is in 'VectorCommon.h'.
-		Vector3t& operator=(const Vector2t<T>& v2);
+		Vector3t& operator=(const Vector2t<T, Q>& v2);
 
 		// Definition is in 'VectorCommon.h'.
-		Vector3t& operator=(const Vector4t<T>& v4);
+		Vector3t& operator=(const Vector4t<T, Q>& v4);
 
 		T& operator[](uint8_t index)
 		{
@@ -114,9 +114,9 @@ namespace Blueberry {
 		bool operator==(const Vector3t& other) const
 		{
 			return
-				Math::IsNearlyEqual<T>(X, other.X, Math::KINDA_SMALL_NUMBER) &&
-				Math::IsNearlyEqual<T>(Y, other.Y, Math::KINDA_SMALL_NUMBER) &&
-				Math::IsNearlyEqual<T>(Z, other.Z, Math::KINDA_SMALL_NUMBER);
+				Math::IsNearlyEqual<T>(X, other.X) &&
+				Math::IsNearlyEqual<T>(Y, other.Y) &&
+				Math::IsNearlyEqual<T>(Z, other.Z);
 		}
 
 		bool operator!=(const Vector3t& other) const
@@ -128,10 +128,10 @@ namespace Blueberry {
 		T X, Y, Z;
 	};
 
-	using Vector3  = Vector3t<float>;
-	using Vector3f = Vector3t<float>;
-	using Vector3d = Vector3t<double>;
-	using Vector3i = Vector3t<int32_t>;
-	using Vector3u = Vector3t<uint32_t>;
+	using Vector3  = Vector3t<float,    float>;
+	using Vector3f = Vector3t<float,    float>;
+	using Vector3d = Vector3t<double,   double>;
+	using Vector3i = Vector3t<int32_t,  float>;
+	using Vector3u = Vector3t<uint32_t, float>;
 
 }

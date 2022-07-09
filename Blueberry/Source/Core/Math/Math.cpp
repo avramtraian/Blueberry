@@ -6,130 +6,136 @@
 #include <cmath>
 #include <cstdlib>
 
-namespace Blueberry { namespace Math {
+namespace Blueberry {
 
-	float SquareRoot(float x)
-	{
-		return sqrtf(x);
-	}
+	static_assert(sizeof(float)  == 4, "sizeof(float) expected to be 4.");
+	static_assert(sizeof(double) == 8, "sizeof(double) expected to be 8.");
+	
+	namespace Mathf {
 
-	double SquareRootD(double x)
-	{
-		return sqrt(x);
-	}
-
-	float Power(float base, float exp)
-	{
-		return powf(base, exp);
-	}
-
-	float Power(float base, int64_t exp)
-	{
-		float result = 1.0f;
-
-		for (int64_t index = 0; index < exp; index++)
-			result *= base;
-
-		if (exp < 0)
+		float SquareRoot(float x)
 		{
-			float one_over_base = 1.0f / base;
-			for (int64_t index = exp; index > 0; index--)
-				result *= one_over_base;
+			return sqrtf(x);
 		}
 
-		return result;
-	}
-
-	double PowerD(double base, double exp)
-	{
-		return pow(base, exp);
-	}
-
-	double PowerD(double base, int64_t exp)
-	{
-		double result = 1.0;
-
-		for (int64_t index = 0; index < exp; index++)
-			result *= base;
-
-		if (exp < 0)
+		double SquareRootD(double x)
 		{
-			double one_over_base = 1.0 / base;
-			for (int64_t index = exp; index > 0; index--)
-				result *= one_over_base;
+			return sqrt(x);
 		}
 
-		return result;
+		float Power(float base, float exp)
+		{
+			return powf(base, exp);
+		}
+
+		float Power(float base, int64_t exp)
+		{
+			float result = 1.0f;
+
+			for (int64_t index = 0; index < exp; index++)
+				result *= base;
+
+			if (exp < 0)
+			{
+				float one_over_base = 1.0f / base;
+				for (int64_t index = exp; index > 0; index--)
+					result *= one_over_base;
+			}
+
+			return result;
+		}
+
+		float Sin(float x)
+		{
+			return sinf(x);
+		}
+
+		float Asin(float x)
+		{
+			return asinf(x);
+		}
+
+		float Cos(float x)
+		{
+			return cosf(x);
+		}
+
+		float Acos(float x)
+		{
+			return acosf(x);
+		}
+
+		float Tan(float x)
+		{
+			return tanf(x);
+		}
+
+		float Atan(float x)
+		{
+			return atanf(x);
+		}
+
 	}
 
-	int64_t PowerI(int64_t base, uint64_t exp)
-	{
-		int64_t result = 1;
+	namespace Mathd {
 
-		for (uint64_t index = 0; index < exp; index++)
-			result *= base;
+		double SquareRoot(double x)
+		{
+			return sqrt(x);
+		}
 
-		return result;
+		double Power(double base, double exp)
+		{
+			return pow(base, exp);
+		}
+
+		double Power(double base, int64_t exp)
+		{
+			double result = 1.0f;
+
+			for (int64_t index = 0; index < exp; index++)
+				result *= base;
+
+			if (exp < 0)
+			{
+				double one_over_base = 1.0f / base;
+				for (int64_t index = exp; index > 0; index--)
+					result *= one_over_base;
+			}
+
+			return result;
+		}
+
+		double Sin(double x)
+		{
+			return sin(x);
+		}
+
+		double Asin(double x)
+		{
+			return asin(x);
+		}
+
+		double Cos(double x)
+		{
+			return cos(x);
+		}
+
+		double Acos(double x)
+		{
+			return acos(x);
+		}
+
+		double Tan(double x)
+		{
+			return tan(x);
+		}
+
+		double Atan(double x)
+		{
+			return atan(x);
+		}
+
 	}
 
-	float Sin(float x)
-	{
-		return sinf(x);
-	}
-
-	double SinD(double x)
-	{
-		return sin(x);
-	}
-
-	float Asin(float x)
-	{
-		return asinf(x);
-	}
-
-	double AsinD(double x)
-	{
-		return asin(x);
-	}
-
-	float Cos(float x)
-	{
-		return cosf(x);
-	}
-
-	double CosD(double x)
-	{
-		return cos(x);
-	}
-
-	float Acos(float x)
-	{
-		return acosf(x);
-	}
-
-	double AcosD(double x)
-	{
-		return acos(x);
-	}
-
-	float Tan(float x)
-	{
-		return tanf(x);
-	}
-
-	double TanD(double x)
-	{
-		return tan(x);
-	}
-
-	float Atan(float x)
-	{
-		return atanf(x);
-	}
-
-	double AtanD(double x)
-	{
-		return atan(x);
-	}
-
-} }
+}

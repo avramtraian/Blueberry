@@ -103,7 +103,7 @@ namespace Blueberry {
 		}
 
 	public:
-		static Matrix4t Translate(const Vector3t<T>& v)
+		static Matrix4t Translate(const Vector3t<T, T>& v)
 		{
 			Matrix4t out;
 			out.Data[12]  = v.X;
@@ -116,8 +116,8 @@ namespace Blueberry {
 		{
 			Matrix4t out;
 
-			T s = Math::Sin(angle);
-			T c = Math::Cos(angle);
+			T s = Mathf::Sin(angle);
+			T c = Mathf::Cos(angle);
 
 			out.Data[5]  = c;
 			out.Data[6]  = s;
@@ -131,8 +131,8 @@ namespace Blueberry {
 		{
 			Matrix4t out;
 
-			T s = Math::Sin(angle);
-			T c = Math::Cos(angle);
+			T s = Mathf::Sin(angle);
+			T c = Mathf::Cos(angle);
 
 			out.Data[0]  = c;
 			out.Data[2]  = -s;
@@ -146,8 +146,8 @@ namespace Blueberry {
 		{
 			Matrix4t out;
 			
-			T s = Math::Sin(angle);
-			T c = Math::Cos(angle);
+			T s = Mathf::Sin(angle);
+			T c = Mathf::Cos(angle);
 
 			out.Data[0] = c;
 			out.Data[1] = s;
@@ -157,7 +157,7 @@ namespace Blueberry {
 			return out;
 		}
 
-		static Matrix4t RotateEulerXYZ(const Vector3t<T>& angles)
+		static Matrix4t RotateEulerXYZ(const Vector3t<T, T>& angles)
 		{
 			Matrix4t rx = Matrix4t::RotateEulerX(angles.X);
 			Matrix4t ry = Matrix4t::RotateEulerY(angles.Y);
@@ -166,7 +166,7 @@ namespace Blueberry {
 			return rx * ry * rz;
 		}
 
-		static Matrix4t Scale(const Vector3t<T>& v)
+		static Matrix4t Scale(const Vector3t<T, T>& v)
 		{
 			Matrix4t out;
 			out.Data[0]  = v.X;
@@ -179,7 +179,7 @@ namespace Blueberry {
 		{
 			Matrix4t out;
 
-			T half_tan = Math::Tan(fov * (T)0.5);
+			T half_tan = Mathf::Tan(fov * (T)0.5);
 			T one_over_nmf = (T)1 / (near_clip - far_clip);
 
 			out.Data[0] = (T)1 / (aspect_ratio * half_tan);
@@ -210,16 +210,16 @@ namespace Blueberry {
 			return out;
 		}
 
-		static Matrix4t LookAt(const Vector3t<T>& eye_position, const Vector3t<T>& target_position, const Vector3t<T>& up)
+		static Matrix4t LookAt(const Vector3t<T, T>& eye_position, const Vector3t<T, T>& target_position, const Vector3t<T, T>& up)
 		{
-			Vector3t<T> z_axis = Vector3t<T>::Normalize({
+			Vector3t<T, T> z_axis = Vector3t<T, T>::Normalize({
 				target_position.X - eye_position.X,
 				target_position.Y - eye_position.Y,
 				target_position.Z - eye_position.Z
 			});
 
-			Vector3t<T> x_axis = Vector3t<T>::Normalize(Vector3t<T>::Cross(z_axis, up));
-			Vector3t<T> y_axis = Vector3t<T>::Cross(x_axis, z_axis);
+			Vector3t<T, T> x_axis = Vector3t<T, T>::Normalize(Vector3t<T, T>::Cross(z_axis, up));
+			Vector3t<T, T> y_axis = Vector3t<T, T>::Cross(x_axis, z_axis);
 
 			Matrix4t out;
 
@@ -238,9 +238,9 @@ namespace Blueberry {
 			out.Data[10] = -z_axis.Z;
 			out.Data[11] = (T)0;
 
-			out.Data[12] = -Vector3t<T>::Dot(x_axis, eye_position);
-			out.Data[13] = -Vector3t<T>::Dot(y_axis, eye_position);
-			out.Data[14] = Vector3t<T>::Dot(z_axis, eye_position);
+			out.Data[12] = -Vector3t<T, T>::Dot(x_axis, eye_position);
+			out.Data[13] = -Vector3t<T, T>::Dot(y_axis, eye_position);
+			out.Data[14] = Vector3t<T, T>::Dot(z_axis, eye_position);
 			out.Data[15] = (T)1;
 
 			return out;
@@ -316,7 +316,7 @@ namespace Blueberry {
 		{
 			for (uint8_t index = 0; index < 16; index++)
 			{
-				if (!Math::IsNearlyEqual<T>(Data[index], other.Data[index], Math::KINDA_SMALL_NUMBER))
+				if (!Math::IsNearlyEqual<T>(Data[index], other.Data[index]))
 					return false;
 			}
 			return true;

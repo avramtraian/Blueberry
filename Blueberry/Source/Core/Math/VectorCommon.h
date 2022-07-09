@@ -13,26 +13,26 @@ namespace Blueberry {
 	// Begin Vector2 ///////////////////////////
 	////////////////////////////////////////////
 
-	template<typename T>
-	Vector2t<T>::Vector2t(const Vector3t<T>& v3)
+	template<typename T, typename Q>
+	Vector2t<T, Q>::Vector2t(const Vector3t<T, Q>& v3)
 		: X(v3.X), Y(v3.Y)
 	{}
 
-	template<typename T>
-	Vector2t<T>::Vector2t(const Vector4t<T>& v4)
+	template<typename T, typename Q>
+	Vector2t<T, Q>::Vector2t(const Vector4t<T, Q>& v4)
 		: X(v4.X), Y(v4.Y)
 	{}
 
-	template<typename T>
-	Vector2t<T>& Vector2t<T>::operator=(const Vector3t<T>& v3)
+	template<typename T, typename Q>
+	Vector2t<T, Q>& Vector2t<T, Q>::operator=(const Vector3t<T, Q>& v3)
 	{
 		X = v3.X;
 		Y = v3.Y;
 		return *this;
 	}
 
-	template<typename T>
-	Vector2t<T>& Vector2t<T>::operator=(const Vector4t<T>& v4)
+	template<typename T, typename Q>
+	Vector2t<T, Q>& Vector2t<T, Q>::operator=(const Vector4t<T, Q>& v4)
 	{
 		X = v4.X;
 		Y = v4.Y;
@@ -48,18 +48,18 @@ namespace Blueberry {
 	// Begin Vector3 ///////////////////////////
 	////////////////////////////////////////////
 
-	template<typename T>
-	Vector3t<T>::Vector3t(const Vector2t<T>& v2)
+	template<typename T, typename Q>
+	Vector3t<T, Q>::Vector3t(const Vector2t<T, Q>& v2)
 		: X(v2.X), Y(v2.Y), Z((T)0)
 	{}
 
-	template<typename T>
-	Vector3t<T>::Vector3t(const Vector4t<T>& v4)
+	template<typename T, typename Q>
+	Vector3t<T, Q>::Vector3t(const Vector4t<T, Q>& v4)
 		: X(v4.X), Y(v4.Y), X(v4.Z)
 	{}
 
-	template<typename T>
-	Vector3t<T>& Vector3t<T>::operator=(const Vector2t<T>& v2)
+	template<typename T, typename Q>
+	Vector3t<T, Q>& Vector3t<T, Q>::operator=(const Vector2t<T, Q>& v2)
 	{
 		X = v2.X;
 		Y = v2.Y;
@@ -67,8 +67,8 @@ namespace Blueberry {
 		return *this;
 	}
 
-	template<typename T>
-	Vector3t<T>& Vector3t<T>::operator=(const Vector4t<T>& v4)
+	template<typename T, typename Q>
+	Vector3t<T, Q>& Vector3t<T, Q>::operator=(const Vector4t<T, Q>& v4)
 	{
 		X = v4.X;
 		Y = v4.Y;
@@ -85,18 +85,18 @@ namespace Blueberry {
 	// Begin Vector4 ///////////////////////////
 	////////////////////////////////////////////
 
-	template<typename T>
-	Vector4t<T>::Vector4t(const Vector2t<T>& v2)
+	template<typename T, typename Q>
+	Vector4t<T, Q>::Vector4t(const Vector2t<T, Q>& v2)
 		: X(v2.X), Y(v2.Y), Z((T)0), W((T)0)
 	{}
 
-	template<typename T>
-	Vector4t<T>::Vector4t(const Vector3t<T>& v3)
+	template<typename T, typename Q>
+	Vector4t<T, Q>::Vector4t(const Vector3t<T, Q>& v3)
 		: X(v3.X), Y(v3.Y), Z(v3.Z), W((T)0)
 	{}
 
-	template<typename T>
-	Vector4t<T>& Vector4t<T>::operator=(const Vector2t<T>& v2)
+	template<typename T, typename Q>
+	Vector4t<T, Q>& Vector4t<T, Q>::operator=(const Vector2t<T, Q>& v2)
 	{
 		X = v2.X;
 		Y = v2.Y;
@@ -105,8 +105,8 @@ namespace Blueberry {
 		return *this;
 	}
 
-	template<typename T>
-	Vector4t<T>& Vector4t<T>::operator=(const Vector3t<T>& v3)
+	template<typename T, typename Q>
+	Vector4t<T, Q>& Vector4t<T, Q>::operator=(const Vector3t<T, Q>& v3)
 	{
 		X = v3.X;
 		Y = v3.Y;

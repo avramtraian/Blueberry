@@ -106,6 +106,21 @@ namespace Blueberry {
 		// Definition is in 'MatrixCommon.h'.
 		Matrix3t& operator=(const Matrix4t<T>& m4);
 
+		bool operator==(const Matrix3t& other) const
+		{
+			for (uint8_t index = 0; index < 9; index++)
+			{
+				if (!Math::IsNearlyEqual<T>(Data[index], other.Data[index]))
+					return false;
+			}
+			return true;
+		}
+
+		bool operator!=(const Matrix3t& other) const
+		{
+			return !(*this == other);
+		}
+
 	public:
 		T Data[9];
 	};
