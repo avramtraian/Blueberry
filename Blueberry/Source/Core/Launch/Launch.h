@@ -42,7 +42,7 @@ namespace Blueberry {
 			Application* application = CreateApplication(command_args);
 
 			// Runs the application
-			return_code = application->Run(cmd_params, cmd_params_count);
+			return_code = application->Run();
 
 			// Destroys the application
 			delete application;

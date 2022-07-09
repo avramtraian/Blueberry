@@ -48,7 +48,7 @@ namespace Blueberry {
 		s_Instance = nullptr;
 	}
 
-	int32_t Application::Run(CharT** cmd_params, uint32_t cmd_params_count)
+	int32_t Application::Run()
 	{
 		m_IsRunning = true;
 

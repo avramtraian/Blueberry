@@ -55,7 +55,7 @@ namespace Blueberry {
 		static void OnEvent(const Window* window, Event& e);
 
 	public:
-		int32_t Run(CharT** cmd_params, uint32_t cmd_params_count);
+		int32_t Run();
 
 		void AddLayer(Layer* layer);
 
