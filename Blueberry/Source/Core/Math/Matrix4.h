@@ -46,31 +46,6 @@ namespace Blueberry {
 		{
 			Vector4 out;
 
-#if 1
-			out.X =
-				v.X * m.Data[0] +
-				v.Y * m.Data[4] +
-				v.Z * m.Data[8] +
-				v.W * m.Data[12];
-
-			out.Y =
-				v.X * m.Data[1] +
-				v.Y * m.Data[5] +
-				v.Z * m.Data[9] +
-				v.W * m.Data[13];
-
-			out.Z =
-				v.X * m.Data[2] +
-				v.Y * m.Data[6] +
-				v.Z * m.Data[10] +
-				v.W * m.Data[14];
-
-			out.W =
-				v.X * m.Data[3] +
-				v.Y * m.Data[7] +
-				v.Z * m.Data[11] +
-				v.W * m.Data[15];
-#else
 			out.X =
 				m.Data[0]  * v.X +
 				m.Data[1]  * v.Y +
@@ -94,7 +69,6 @@ namespace Blueberry {
 				m.Data[13] * v.Y +
 				m.Data[14] * v.Z +
 				m.Data[15] * v.W;
-#endif
 
 			return out;
 		}
@@ -137,12 +111,30 @@ namespace Blueberry {
 		static Matrix4 RotateEulerX(float angle)
 		{
 			Matrix4 out;
+
+			float s = Math::Sin(angle);
+			float c = Math::Cos(angle);
+
+			out.Data[5]  = c;
+			out.Data[6]  = -s;
+			out.Data[9]  = s;
+			out.Data[10] = c;
+
 			return out;
 		}
 
 		static Matrix4 RotateEulerY(float angle)
 		{
 			Matrix4 out;
+
+			float s = Math::Sin(angle);
+			float c = Math::Cos(angle);
+
+			out.Data[0]  = c;
+			out.Data[2]  = s;
+			out.Data[8]  = -s;
+			out.Data[10] = c;
+
 			return out;
 		}
 
@@ -154,8 +146,8 @@ namespace Blueberry {
 			float c = Math::Cos(angle);
 
 			out.Data[0] = c;
-			out.Data[1] = s;
-			out.Data[4] = -s;
+			out.Data[1] = -s;
+			out.Data[4] = s;
 			out.Data[5] = c;
 
 			return out;
@@ -163,8 +155,11 @@ namespace Blueberry {
 
 		static Matrix4 RotateEulerXYZ(const Vector3& angles)
 		{
-			Matrix4 out;
-			return out;
+			Matrix4 rx = Matrix4::RotateEulerX(angles.X);
+			Matrix4 ry = Matrix4::RotateEulerY(angles.Y);
+			Matrix4 rz = Matrix4::RotateEulerZ(angles.Z);
+
+			return rx * ry * rz;
 		}
 
 		static Matrix4 Scale(const Vector3& v)
@@ -173,6 +168,41 @@ namespace Blueberry {
 			out.Data[0]  = v.X;
 			out.Data[5]  = v.Y;
 			out.Data[10] = v.Z;
+			return out;
+		}
+
+		static Matrix4 Perspective(float fov, float aspect_ratio, float near_clip, float far_clip)
+		{
+			Matrix4 out;
+
+			float half_tan = Math::Tan(fov * 0.5f);
+			float one_over_nmf = 1.0f / (near_clip - far_clip);
+
+			out.Data[0] = 1.0f / (aspect_ratio * half_tan);
+			out.Data[5] = 1.0f / half_tan;
+			out.Data[10] = (near_clip + far_clip) * one_over_nmf;
+			out.Data[11] = -1.0f;
+			out.Data[14] = 2.0f * near_clip * far_clip * one_over_nmf;
+
+			return out;
+		}
+
+		static Matrix4 Ortographic(float left, float right, float bottom, float top, float near_clip, float far_clip)
+		{
+			Matrix4 out;
+
+			float lr = 1.0f / (left - right);
+			float bt = 1.0f / (bottom - top);
+			float nf = 1.0f / (near_clip - far_clip);
+
+			out.Data[0] = -2.0f * lr;
+			out.Data[5] = -2.0f * bt;
+			out.Data[10] = -2.0f * nf;
+
+			out.Data[12] = (left + right) * lr;
+			out.Data[13] = (bottom + top) / bt;
+			out.Data[14] = (near_clip + far_clip) * nf;
+
 			return out;
 		}
 
@@ -234,6 +264,21 @@ namespace Blueberry {
 		Vector4 operator*(const Vector4& v) const
 		{
 			return Matrix4::MultiplyVector(*this, v);
+		}
+
+		bool operator==(const Matrix4& other) const
+		{
+			for (uint8_t index = 0; index < 16; index++)
+			{
+				if (!Math::IsNearlyEqual(Data[index], other.Data[index], Math::KINDA_SMALL_NUMBER))
+					return false;
+			}
+			return true;
+		}
+
+		bool operator!=(const Matrix4& other) const
+		{
+			return !(*this == other);
 		}
 
 	public:

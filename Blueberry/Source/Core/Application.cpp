@@ -18,7 +18,7 @@
 
 namespace Blueberry {
 
-	Blueberry::Application* Application::s_Instance = nullptr;
+	Application* Application::s_Instance = nullptr;
 
 	Application::Application(const ApplicationSpecification& spec)
 		: m_Specification(spec)

@@ -10,9 +10,6 @@ namespace Blueberry {
 	struct Vector4
 	{
 	public:
-
-
-	public:
 		Vector4()
 			: X(0.0f), Y(0.0f), Z(0.0f), W(0.0f)
 		{}
@@ -47,6 +44,20 @@ namespace Blueberry {
 		const float& operator[](uint8_t index) const
 		{
 			return *(&X + index);
+		}
+
+		bool operator==(const Vector4& other) const
+		{
+			return
+				Math::IsNearlyEqual(X, other.X, Math::KINDA_SMALL_NUMBER) &&
+				Math::IsNearlyEqual(Y, other.Y, Math::KINDA_SMALL_NUMBER) &&
+				Math::IsNearlyEqual(Z, other.Z, Math::KINDA_SMALL_NUMBER) &&
+				Math::IsNearlyEqual(W, other.W, Math::KINDA_SMALL_NUMBER);
+		}
+
+		bool operator!=(const Vector4& other) const
+		{
+			return !(*this == other);
 		}
 
 	public:
