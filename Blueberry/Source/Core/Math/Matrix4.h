@@ -103,12 +103,12 @@ namespace Blueberry {
 		}
 
 	public:
-		static Matrix4t Translate(const Vector3& v)
+		static Matrix4t Translate(const Vector3t<T>& v)
 		{
 			Matrix4t out;
-			out.Data[3]  = v.X;
-			out.Data[7]  = v.Y;
-			out.Data[11] = v.Z;
+			out.Data[12]  = v.X;
+			out.Data[13]  = v.Y;
+			out.Data[14] = v.Z;
 			return out;
 		}
 
@@ -120,8 +120,8 @@ namespace Blueberry {
 			T c = Math::Cos(angle);
 
 			out.Data[5]  = c;
-			out.Data[6]  = -s;
-			out.Data[9]  = s;
+			out.Data[6]  = s;
+			out.Data[9]  = -s;
 			out.Data[10] = c;
 
 			return out;
@@ -135,8 +135,8 @@ namespace Blueberry {
 			T c = Math::Cos(angle);
 
 			out.Data[0]  = c;
-			out.Data[2]  = s;
-			out.Data[8]  = -s;
+			out.Data[2]  = -s;
+			out.Data[8]  = s;
 			out.Data[10] = c;
 
 			return out;
@@ -150,14 +150,14 @@ namespace Blueberry {
 			T c = Math::Cos(angle);
 
 			out.Data[0] = c;
-			out.Data[1] = -s;
-			out.Data[4] = s;
+			out.Data[1] = s;
+			out.Data[4] = -s;
 			out.Data[5] = c;
 
 			return out;
 		}
 
-		static Matrix4t RotateEulerXYZ(const Vector3& angles)
+		static Matrix4t RotateEulerXYZ(const Vector3t<T>& angles)
 		{
 			Matrix4t rx = Matrix4t::RotateEulerX(angles.X);
 			Matrix4t ry = Matrix4t::RotateEulerY(angles.Y);
@@ -166,7 +166,7 @@ namespace Blueberry {
 			return rx * ry * rz;
 		}
 
-		static Matrix4t Scale(const Vector3& v)
+		static Matrix4t Scale(const Vector3t<T>& v)
 		{
 			Matrix4t out;
 			out.Data[0]  = v.X;
@@ -206,6 +206,42 @@ namespace Blueberry {
 			out.Data[12] = (left + right) * lr;
 			out.Data[13] = (bottom + top) / bt;
 			out.Data[14] = (near_clip + far_clip) * nf;
+
+			return out;
+		}
+
+		static Matrix4t LookAt(const Vector3t<T>& eye_position, const Vector3t<T>& target_position, const Vector3t<T>& up)
+		{
+			Vector3t<T> z_axis = Vector3t<T>::Normalize({
+				target_position.X - eye_position.X,
+				target_position.Y - eye_position.Y,
+				target_position.Z - eye_position.Z
+			});
+
+			Vector3t<T> x_axis = Vector3t<T>::Normalize(Vector3t<T>::Cross(z_axis, up));
+			Vector3t<T> y_axis = Vector3t<T>::Cross(x_axis, z_axis);
+
+			Matrix4t out;
+
+			out.Data[0]  = x_axis.X;
+			out.Data[1]  = y_axis.X;
+			out.Data[2]  = -z_axis.X;
+			out.Data[3]  = (T)0;
+
+			out.Data[4]  = x_axis.Y;
+			out.Data[5]  = y_axis.Y;
+			out.Data[6]  = -z_axis.Y;
+			out.Data[7]  = (T)0;
+
+			out.Data[8]  = x_axis.Z;
+			out.Data[9]  = y_axis.Z;
+			out.Data[10] = -z_axis.Z;
+			out.Data[11] = (T)0;
+
+			out.Data[12] = -Vector3t<T>::Dot(x_axis, eye_position);
+			out.Data[13] = -Vector3t<T>::Dot(y_axis, eye_position);
+			out.Data[14] = Vector3t<T>::Dot(z_axis, eye_position);
+			out.Data[15] = (T)1;
 
 			return out;
 		}
