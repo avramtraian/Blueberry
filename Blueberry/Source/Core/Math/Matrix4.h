@@ -8,22 +8,26 @@
 
 namespace Blueberry {
 
-	struct Matrix4
+	template<typename T>
+	struct Matrix3t;
+
+	template<typename T>
+	struct Matrix4t
 	{
 	public:
-		static constexpr Matrix4 Identity()
+		static constexpr Matrix4t Identity()
 		{
-			return Matrix4();
+			return Matrix4t();
 		}
 
 	public:
-		static Matrix4 Multiply(const Matrix4& m1, const Matrix4& m2)
+		static Matrix4t Multiply(const Matrix4t& m1, const Matrix4t& m2)
 		{
-			Matrix4 out;
+			Matrix4t out;
 			
-			const float* m1_data = m1.Data;
-			const float* m2_data = m2.Data;
-			float* out_data = out.Data;
+			const T* m1_data = m1.Data;
+			const T* m2_data = m2.Data;
+			T* out_data = out.Data;
 
 			for (uint8_t i = 0; i < 4; i++)
 			{
@@ -42,7 +46,7 @@ namespace Blueberry {
 			return out;
 		}
 
-		static Vector4 MultiplyVector(const Matrix4& m, const Vector4& v)
+		static Vector4 MultiplyVector(const Matrix4t& m, const Vector4& v)
 		{
 			Vector4 out;
 
@@ -73,9 +77,9 @@ namespace Blueberry {
 			return out;
 		}
 
-		static Matrix4 Transpose(const Matrix4& m)
+		static Matrix4t Transpose(const Matrix4t& m)
 		{
-			Matrix4 out;
+			Matrix4t out;
 			for (uint8_t i = 0; i < 4; i++)
 			{
 				for (uint8_t j = 0; j < 4; j++)
@@ -86,34 +90,34 @@ namespace Blueberry {
 			return out;
 		}
 
-		static float Determinant(const Matrix4& m)
+		static T Determinant(const Matrix4t& m)
 		{
-			float determinant = 0.0f;
+			T determinant = (T)0;
 			return determinant;
 		}
 
-		static Matrix4 Inverse(const Matrix4& m)
+		static Matrix4t Inverse(const Matrix4t& m)
 		{
-			Matrix4 out;
+			Matrix4t out;
 			return out;
 		}
 
 	public:
-		static Matrix4 Translate(const Vector3& v)
+		static Matrix4t Translate(const Vector3& v)
 		{
-			Matrix4 out;
+			Matrix4t out;
 			out.Data[3]  = v.X;
 			out.Data[7]  = v.Y;
 			out.Data[11] = v.Z;
 			return out;
 		}
 
-		static Matrix4 RotateEulerX(float angle)
+		static Matrix4t RotateEulerX(T angle)
 		{
-			Matrix4 out;
+			Matrix4t out;
 
-			float s = Math::Sin(angle);
-			float c = Math::Cos(angle);
+			T s = Math::Sin(angle);
+			T c = Math::Cos(angle);
 
 			out.Data[5]  = c;
 			out.Data[6]  = -s;
@@ -123,12 +127,12 @@ namespace Blueberry {
 			return out;
 		}
 
-		static Matrix4 RotateEulerY(float angle)
+		static Matrix4t RotateEulerY(T angle)
 		{
-			Matrix4 out;
+			Matrix4t out;
 
-			float s = Math::Sin(angle);
-			float c = Math::Cos(angle);
+			T s = Math::Sin(angle);
+			T c = Math::Cos(angle);
 
 			out.Data[0]  = c;
 			out.Data[2]  = s;
@@ -138,12 +142,12 @@ namespace Blueberry {
 			return out;
 		}
 
-		static Matrix4 RotateEulerZ(float angle)
+		static Matrix4t RotateEulerZ(T angle)
 		{
-			Matrix4 out;
+			Matrix4t out;
 			
-			float s = Math::Sin(angle);
-			float c = Math::Cos(angle);
+			T s = Math::Sin(angle);
+			T c = Math::Cos(angle);
 
 			out.Data[0] = c;
 			out.Data[1] = -s;
@@ -153,51 +157,51 @@ namespace Blueberry {
 			return out;
 		}
 
-		static Matrix4 RotateEulerXYZ(const Vector3& angles)
+		static Matrix4t RotateEulerXYZ(const Vector3& angles)
 		{
-			Matrix4 rx = Matrix4::RotateEulerX(angles.X);
-			Matrix4 ry = Matrix4::RotateEulerY(angles.Y);
-			Matrix4 rz = Matrix4::RotateEulerZ(angles.Z);
+			Matrix4t rx = Matrix4t::RotateEulerX(angles.X);
+			Matrix4t ry = Matrix4t::RotateEulerY(angles.Y);
+			Matrix4t rz = Matrix4t::RotateEulerZ(angles.Z);
 
 			return rx * ry * rz;
 		}
 
-		static Matrix4 Scale(const Vector3& v)
+		static Matrix4t Scale(const Vector3& v)
 		{
-			Matrix4 out;
+			Matrix4t out;
 			out.Data[0]  = v.X;
 			out.Data[5]  = v.Y;
 			out.Data[10] = v.Z;
 			return out;
 		}
 
-		static Matrix4 Perspective(float fov, float aspect_ratio, float near_clip, float far_clip)
+		static Matrix4t Perspective(T fov, T aspect_ratio, T near_clip, T far_clip)
 		{
-			Matrix4 out;
+			Matrix4t out;
 
-			float half_tan = Math::Tan(fov * 0.5f);
-			float one_over_nmf = 1.0f / (near_clip - far_clip);
+			T half_tan = Math::Tan(fov * (T)0.5);
+			T one_over_nmf = (T)1 / (near_clip - far_clip);
 
-			out.Data[0] = 1.0f / (aspect_ratio * half_tan);
-			out.Data[5] = 1.0f / half_tan;
+			out.Data[0] = (T)1 / (aspect_ratio * half_tan);
+			out.Data[5] = (T)1 / half_tan;
 			out.Data[10] = (near_clip + far_clip) * one_over_nmf;
-			out.Data[11] = -1.0f;
-			out.Data[14] = 2.0f * near_clip * far_clip * one_over_nmf;
+			out.Data[11] = -(T)1;
+			out.Data[14] = (T)2 * near_clip * far_clip * one_over_nmf;
 
 			return out;
 		}
 
-		static Matrix4 Ortographic(float left, float right, float bottom, float top, float near_clip, float far_clip)
+		static Matrix4t Ortographic(T left, T right, T bottom, T top, T near_clip, T far_clip)
 		{
-			Matrix4 out;
+			Matrix4t out;
 
-			float lr = 1.0f / (left - right);
-			float bt = 1.0f / (bottom - top);
-			float nf = 1.0f / (near_clip - far_clip);
+			T lr = (T)1 / (left - right);
+			T bt = (T)1 / (bottom - top);
+			T nf = (T)1 / (near_clip - far_clip);
 
-			out.Data[0] = -2.0f * lr;
-			out.Data[5] = -2.0f * bt;
-			out.Data[10] = -2.0f * nf;
+			out.Data[0] = (T)(-2.0) * lr;
+			out.Data[5] = (T)(-2.0) * bt;
+			out.Data[10] = (T)(-2.0) * nf;
 
 			out.Data[12] = (left + right) * lr;
 			out.Data[13] = (bottom + top) / bt;
@@ -207,20 +211,20 @@ namespace Blueberry {
 		}
 
 	public:
-		constexpr Matrix4()
+		constexpr Matrix4t()
 			: Data{
-				1.0f, 0.0f, 0.0f, 0.0f,
-				0.0f, 1.0f, 0.0f, 0.0f,
-				0.0f, 0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f
+				(T)1, (T)0, (T)0, (T)0,
+				(T)0, (T)1, (T)0, (T)0,
+				(T)0, (T)0, (T)1, (T)0,
+				(T)0, (T)0, (T)0, (T)1
 			}
 		{}
 
-		Matrix4(
-			float x00, float x01, float x02, float x03,
-			float x10, float x11, float x12, float x13,
-			float x20, float x21, float x22, float x23,
-			float x30, float x31, float x32, float x33
+		Matrix4t(
+			T x00, T x01, T x02, T x03,
+			T x10, T x11, T x12, T x13,
+			T x20, T x21, T x22, T x23,
+			T x30, T x31, T x32, T x33
 		)
 			: Data{
 				x00, x01, x02, x03,
@@ -230,7 +234,7 @@ namespace Blueberry {
 			}
 		{}
 
-		constexpr Matrix4(const Matrix4& other)
+		constexpr Matrix4t(const Matrix4t& other)
 			: Data{
 				other.Data[0],  other.Data[1],  other.Data[2],  other.Data[3],
 				other.Data[4],  other.Data[5],  other.Data[6],  other.Data[7],
@@ -239,50 +243,62 @@ namespace Blueberry {
 			}
 		{}
 
+		// Definition is in 'MatrixCommon.h'.
+		Matrix4t(const Matrix3t<T>& m3);
+
 	public:
-		Matrix4& operator=(const Matrix4& other)
+		Matrix4t& operator=(const Matrix4t& other)
 		{
 			Memory::Copy(Data, other.Data, sizeof(Data));
 			return *this;
 		}
 
-		float* operator[](uint8_t index)
+		// Definition is in 'MatrixCommon.h'.
+		Matrix4t& operator=(const Matrix3t<T>& m3);
+
+		T* operator[](uint8_t index)
 		{
 			return Data + (index * 4);
 		}
 
-		const float* operator[](uint8_t index) const
+		const T* operator[](uint8_t index) const
 		{
 			return Data + (index * 4);
 		}
 
-		Matrix4 operator*(const Matrix4& other) const
+		Matrix4t operator*(const Matrix4t& other) const
 		{
-			return Matrix4::Multiply(*this, other);
+			return Matrix4t::Multiply(*this, other);
 		}
 
 		Vector4 operator*(const Vector4& v) const
 		{
-			return Matrix4::MultiplyVector(*this, v);
+			return Matrix4t::MultiplyVector(*this, v);
 		}
 
-		bool operator==(const Matrix4& other) const
+		bool operator==(const Matrix4t& other) const
 		{
 			for (uint8_t index = 0; index < 16; index++)
 			{
-				if (!Math::IsNearlyEqual(Data[index], other.Data[index], Math::KINDA_SMALL_NUMBER))
+				if (!Math::IsNearlyEqual<T>(Data[index], other.Data[index], Math::KINDA_SMALL_NUMBER))
 					return false;
 			}
 			return true;
 		}
 
-		bool operator!=(const Matrix4& other) const
+		bool operator!=(const Matrix4t& other) const
 		{
 			return !(*this == other);
 		}
 
 	public:
-		float Data[16];
+		T Data[16];
 	};
+
+	using Matrix4  = Matrix4t<float>;
+	using Matrix4f = Matrix4t<float>;
+	using Matrix4d = Matrix4t<double>;
+	using Matrix4i = Matrix4t<int32_t>;
+	using Matrix4u = Matrix4t<uint32_t>;
 
 }

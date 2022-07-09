@@ -104,15 +104,10 @@ namespace Blueberry { namespace Math {
 		return deg * DEG_TO_RAD;
 	}
 
-	BLUE_FORCEINLINE constexpr bool IsNearlyEqual(float x, float y, float error_tolerance)
+	template<typename T>
+	bool constexpr IsNearlyEqual(T x, T y, T error_tolerance)
 	{
-		float d = x - y;
-		return -error_tolerance <= d && d <= error_tolerance;
-	}
-
-	BLUE_FORCEINLINE constexpr bool IsNearlyEqualD(double x, double y, double error_tolerance)
-	{
-		double d = x - y;
+		T d = x - y;
 		return -error_tolerance <= d && d <= error_tolerance;
 	}
 

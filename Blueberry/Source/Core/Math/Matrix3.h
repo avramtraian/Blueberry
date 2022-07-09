@@ -8,22 +8,26 @@
 
 namespace Blueberry {
 
-	struct Matrix3
+	template<typename T>
+	struct Matrix4t;
+
+	template<typename T>
+	struct Matrix3t
 	{
 	public:
-		static constexpr Matrix3 Identity()
+		static constexpr Matrix3t Identity()
 		{
-			return Matrix3();
+			return Matrix3t();
 		}
 
 	public:
-		static Matrix3 Multiply(const Matrix3& m1, const Matrix3& m2)
+		static Matrix3t Multiply(const Matrix3t& m1, const Matrix3t& m2)
 		{
-			Matrix3 out;
+			Matrix3t out;
 
-			const float* m1_data = m1.Data;
-			const float* m2_data = m2.Data;
-			float* out_data = out.Data;
+			const T* m1_data = m1.Data;
+			const T* m2_data = m2.Data;
+			T* out_data = out.Data;
 
 			for (uint8_t i = 0; i < 3; i++)
 			{
@@ -41,7 +45,7 @@ namespace Blueberry {
 			return out;
 		}
 
-		static Vector3 MultiplyVector(const Matrix3& m, const Vector3& v)
+		static Vector3 MultiplyVector(const Matrix3t& m, const Vector3& v)
 		{
 			Vector3 out;
 
@@ -64,23 +68,23 @@ namespace Blueberry {
 		}
 
 	public:
-		constexpr Matrix3()
+		constexpr Matrix3t()
 			: Data{
-				1.0f, 0.0f, 0.0f,
-				0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 1.0f
+				(T)1, (T)0, (T)0,
+				(T)0, (T)1, (T)0,
+				(T)0, (T)0, (T)1
 			}
 		{}
 
-		Matrix3(const Matrix3& other)
+		Matrix3t(const Matrix3t& other)
 		{
 			Memory::Copy(Data, other.Data, sizeof(Data));
 		}
 
-		constexpr Matrix3(
-			float x00, float x01, float x02,
-			float x10, float x11, float x12,
-			float x20, float x21, float x22
+		constexpr Matrix3t(
+			T x00, T x01, T x02,
+			T x10, T x11, T x12,
+			T x20, T x21, T x22
 		)
 			: Data{
 				x00, x01, x02,
@@ -89,15 +93,27 @@ namespace Blueberry {
 			}
 		{}
 
+		// Definition is in 'MatrixCommon.h'.
+		Matrix3t(const Matrix4t<T>& m4);
+
 	public:
-		Matrix3& operator=(const Matrix3& other)
+		Matrix3t& operator=(const Matrix3t& other)
 		{
 			Memory::Copy(Data, other.Data, sizeof(Data));
 			return *this;
 		}
 
+		// Definition is in 'MatrixCommon.h'.
+		Matrix3t& operator=(const Matrix4t<T>& m4);
+
 	public:
-		float Data[9];
+		T Data[9];
 	};
+
+	using Matrix3  = Matrix3t<float>;
+	using Matrix3f = Matrix3t<float>;
+	using Matrix3d = Matrix3t<double>;
+	using Matrix3i = Matrix3t<int32_t>;
+	using Matrix3u = Matrix3t<uint32_t>;
 
 }
