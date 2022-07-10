@@ -9,8 +9,8 @@ namespace Blueberry {
 	class JamEdApplication : public Application
 	{
 	public:
-		JamEdApplication(const ApplicationSpecification& spec)
-			: Application(spec)
+		JamEdApplication(const ApplicationSpecification& spec, bool& out_status)
+			: Application(spec, out_status)
 		{
 			AddLayer(bbnew EditorLayer());
 		}
@@ -20,14 +20,14 @@ namespace Blueberry {
 		}
 	};
 
-	Application* CreateApplication(const CommandLineArguments& command_args)
+	Application* CreateApplication(const CommandLineArguments& command_args, bool& out_status)
 	{
 		ApplicationSpecification spec;
 		spec.Name = TEXT("Blueberry Editor");
 		spec.WindowTitle = TEXT("JamEd -- Windows -- 64-bit -- Renderer: Vulkan -- Untitled*");
 		spec.CommandLineArgs = command_args;
 
-		return bbnew JamEdApplication(spec);
+		return bbnew JamEdApplication(spec, out_status);
 	}
 
 }

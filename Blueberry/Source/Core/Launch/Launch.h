@@ -39,7 +39,14 @@ namespace Blueberry {
 		do
 		{
 			// Creates the application
-			Application* application = CreateApplication(command_args);
+			bool status;
+			Application* application = CreateApplication(command_args, status);
+
+			if (!status)
+			{
+				BLUE_CORE_ASSERT(false);
+				return BLUE_EXIT_CODE_APPLICATION_CREATION_FAILED;
+			}
 
 			// Runs the application
 			return_code = application->Run();

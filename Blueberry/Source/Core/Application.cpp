@@ -20,11 +20,16 @@ namespace Blueberry {
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application(const ApplicationSpecification& spec)
+	Application::Application(const ApplicationSpecification& spec, bool& out_status)
 		: m_Specification(spec)
 	{
+		out_status = true;
+
 		if (s_Instance)
+		{
+			out_status = false;
 			return;
+		}
 		s_Instance = this;
 
 		Input::Initialize();

@@ -46,7 +46,7 @@ namespace Blueberry {
 	class BLUEBERRY_API Application
 	{
 	public:
-		Application(const ApplicationSpecification& spec);
+		Application(const ApplicationSpecification& spec, bool& out_status);
 		virtual ~Application();
 
 	public:
@@ -83,6 +83,6 @@ namespace Blueberry {
 		static Application* s_Instance;
 	};
 
-	Application* CreateApplication(const CommandLineArguments& command_args);
+	Application* CreateApplication(const CommandLineArguments& command_args, bool& out_status);
 
 }
