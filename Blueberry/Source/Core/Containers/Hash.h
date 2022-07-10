@@ -24,7 +24,12 @@ namespace Blueberry {
 	struct Hasher
 	{
 	public:
-		static HashT Get(const T&) { return 0; }
+		/*
+		static HashT Get(const T&)
+		{
+			return HASH_OF_THE_OBJECT;
+		}
+		*/
 	};
 
 	BLUE_DECL_HASH_PRIMITIVE(uint8_t,     8 );
