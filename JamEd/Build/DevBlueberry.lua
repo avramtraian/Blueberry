@@ -32,7 +32,9 @@ project "Blueberry"
 	}
 
 	includedirs {
-		IncludeDirectories["Blueberry"]
+		IncludeDirectories["Blueberry"],
+
+		IncludeDirectories["VulkanSDK"]
 	}
 
 	forceincludes {
@@ -43,8 +45,12 @@ project "Blueberry"
 		"BLUE_BUILD_SHARED_LIBRARY"
 	}
 
-	links {
+	libdirs {
+		LibraryDirectories["VulkanSDK"]
+	}
 
+	links {
+		LibraryNames["VulkanSDK"]
 	}
 
 	filter "platforms:Win64"
