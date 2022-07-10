@@ -7,8 +7,14 @@
 
 namespace Blueberry {
 
+	/**
+	* The namespace that stores the core templated math types & functions.
+	*/
 	namespace Math {
 
+		/**
+		* Used in checking equality of floating type variables.
+		*/
 		template<typename T> struct SmallValue {};
 
 		template<> struct SmallValue<float>    { static constexpr float    V = 1e-4f; };
@@ -16,6 +22,15 @@ namespace Blueberry {
 		template<> struct SmallValue<uint32_t> { static constexpr uint32_t V = 0u;    };
 		template<> struct SmallValue<int32_t>  { static constexpr int32_t  V = 0;     };
 
+		/**
+		* Checks if two variables are equal. Usage in floating point types.
+		* 
+		* @param x The first variable to compare.
+		* @param y The second variable to compare.
+		* @param error_tolerance Maximum allowed (absolute) difference between the values.
+		* 
+		* @returns True if the are nearly equal (might not have the same binary representation); False otherwise.
+		*/
 		template<typename T>
 		BLUE_FORCEINLINE bool constexpr IsNearlyEqual(T x, T y, T error_tolerance = SmallValue<T>::V)
 		{
@@ -23,24 +38,56 @@ namespace Blueberry {
 			return -error_tolerance <= d && d <= error_tolerance;
 		}
 
+		/**
+		* Clamps a value between two other values. Value is clamped in the interval [min, max].
+		* 
+		* @param value The value to be clamped.
+		* @param min_val The minimum allowed value.
+		* @param max_val The maximum allowed value.
+		* 
+		* @returns The clamped value. In the range [min_value, max_value].
+		*/
 		template<typename T>
 		BLUE_FORCEINLINE T constexpr Clamp(T value, T min_val, T max_val)
 		{
 			return (value < min_val) ? min_val : ((value > max_val) ? max_val : value);
 		}
 
+		/**
+		* Returns the smallest value between the two supplied variables.
+		* 
+		* @param x First value.
+		* @param y Second value.
+		* 
+		* @returns The first value if x < y; y otherwise.
+		*/
 		template<typename T>
 		BLUE_FORCEINLINE T constexpr Min(T x, T y)
 		{
 			return x < y ? x : y;
 		}
 
+		/**
+		* Returns the biggest value between the two supplied variables.
+		*
+		* @param x First value.
+		* @param y Second value.
+		*
+		* @returns The first value if x > y; y otherwise.
+		*/
 		template<typename T>
 		BLUE_FORCEINLINE T constexpr Max(T x, T y)
 		{
 			return x > y ? x : y;
 		}
 
+		/**
+		* Returns the absolute value (|x|).
+		* 
+		* @param x The value.
+		* 
+		* @returns The absolute value of x (x if x >= 0; -x otherwise).
+		*/
 		template<typename T>
 		BLUE_FORCEINLINE T constexpr Absolute(T x)
 		{
@@ -49,8 +96,14 @@ namespace Blueberry {
 
 	}
 	
+	/**
+	* The namespace that stores the core float values & functions.
+	*/
 	namespace Mathf {
 
+		/**
+		* PI constants.
+		*/
 		constexpr float PI                  = 3.1415926535897932f;
 		constexpr float TWO_PI              = 2.0f * PI;
 		constexpr float THREE_PI            = 3.0f * PI;
@@ -62,6 +115,9 @@ namespace Blueberry {
 		constexpr float ONE_OVER_TWO_PI     = 1.0f / TWO_PI;
 		constexpr float ONE_OVER_THREE_PI   = 1.0f / THREE_PI;
 
+		/**
+		* Common square roots constants.
+		*/
 		constexpr float SQRT_TWO            = 1.4142135623730950f;
 		constexpr float SQRT_THREE          = 1.7320508075688772f;
 		constexpr float SQRT_FIVE           = 2.2360679774997896f;
@@ -70,13 +126,18 @@ namespace Blueberry {
 		constexpr float ONE_OVER_SQRT_THREE = 1.0f / SQRT_THREE;
 		constexpr float ONE_OVER_SQRT_FIVE  = 1.0f / SQRT_FIVE;
 
+		/**
+		* Radians & Degrees multipliers.
+		*/
 		constexpr float DEG_TO_RAD          = PI / 180.0f;
 		constexpr float RAD_TO_DEG          = 180.0f / PI;
 
+		/**
+		* A number that is much larger than any valid number used in the engine.
+		*/
 		constexpr float BINFINITY           = 1e35f;
 
-		constexpr float KINDA_SMALL_NUMBER  = 1e-4f;
-		constexpr float SMALL_NUMBER        = 1e-6f;
+		//// Basic math functions.
 
 		BLUEBERRY_API float SquareRoot(float x);
 
@@ -102,26 +163,31 @@ namespace Blueberry {
 			return deg * DEG_TO_RAD;
 		}
 
-		BLUE_FORCEINLINE constexpr bool IsNearlyEqual(float x, float y, float error_tolerance = SMALL_NUMBER)
+		// See Math::IsNearlyEqual.
+		BLUE_FORCEINLINE constexpr bool IsNearlyEqual(float x, float y, float error_tolerance)
 		{
 			return Math::IsNearlyEqual<float>(x, y, error_tolerance);
 		}
 
+		// See Math::Clamp.
 		BLUE_FORCEINLINE float constexpr Clamp(float value, float min_val, float max_val)
 		{
 			return Math::Clamp<float>(value, min_val, max_val);
 		}
 
+		// See Math::Min.
 		BLUE_FORCEINLINE float constexpr Min(float x, float y)
 		{
 			return Math::Min<float>(x, y);
 		}
 
+		// See Math::Max.
 		BLUE_FORCEINLINE float constexpr Max(float x, float y)
 		{
 			return Math::Max<float>(x, y);
 		}
 
+		// See Math::Absolute.
 		BLUE_FORCEINLINE float constexpr Absolute(float x)
 		{
 			return Math::Absolute<float>(x);
@@ -129,8 +195,14 @@ namespace Blueberry {
 
 	}
 
+	/**
+	* The namespace that stores the core double values & functions.
+	*/
 	namespace Mathd {
 
+		/**
+		* PI constants.
+		*/
 		constexpr double PI                  = 3.1415926535897932;
 		constexpr double TWO_PI              = 2.0 * PI;
 		constexpr double THREE_PI            = 3.0 * PI;
@@ -142,6 +214,9 @@ namespace Blueberry {
 		constexpr double ONE_OVER_TWO_PI     = 1.0 / TWO_PI;
 		constexpr double ONE_OVER_THREE_PI   = 1.0 / THREE_PI;
 
+		/**
+		* Common square roots constants.
+		*/
 		constexpr double SQRT_TWO            = 1.4142135623730950;
 		constexpr double SQRT_THREE          = 1.7320508075688772;
 		constexpr double SQRT_FIVE           = 2.2360679774997896;
@@ -150,13 +225,18 @@ namespace Blueberry {
 		constexpr double ONE_OVER_SQRT_THREE = 1.0 / SQRT_THREE;
 		constexpr double ONE_OVER_SQRT_FIVE  = 1.0 / SQRT_FIVE;
 
+		/**
+		* Radians & Degrees multipliers.
+		*/
 		constexpr double DEG_TO_RAD          = PI / 180.0;
 		constexpr double RAD_TO_DEG          = 180.0 / PI;
 
-		constexpr double BINFINITY           = 1e35;
+		/**
+		* A number that is much larger than any valid number used in the engine.
+		*/
+		constexpr double BINFINITY           = 1e300;
 
-		constexpr double KINDA_SMALL_NUMBER  = 1e-4;
-		constexpr double SMALL_NUMBER        = 1e-6;
+		//// Basic math functions.
 
 		BLUEBERRY_API double SquareRoot(double x);
 
@@ -182,26 +262,31 @@ namespace Blueberry {
 			return deg * DEG_TO_RAD;
 		}
 
-		BLUE_FORCEINLINE constexpr bool IsNearlyEqual(double x, double y, double error_tolerance = SMALL_NUMBER)
+		// See Math::IsNearlyEqual.
+		BLUE_FORCEINLINE constexpr bool IsNearlyEqual(double x, double y, double error_tolerance)
 		{
 			return Math::IsNearlyEqual<double>(x, y, error_tolerance);
 		}
 
+		// See Math::Clamp.
 		BLUE_FORCEINLINE double constexpr Clamp(double value, double min_val, double max_val)
 		{
 			return Math::Clamp<double>(value, min_val, max_val);
 		}
 
+		// See Math::Min.
 		BLUE_FORCEINLINE double constexpr Min(double x, double y)
 		{
 			return Math::Min<double>(x, y);
 		}
 
+		// See Math::Max.
 		BLUE_FORCEINLINE double constexpr Max(double x, double y)
 		{
 			return Math::Max<double>(x, y);
 		}
 
+		// See Math::Absolute.
 		BLUE_FORCEINLINE double constexpr Absolute(double x)
 		{
 			return Math::Absolute<double>(x);
