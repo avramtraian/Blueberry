@@ -165,6 +165,13 @@ namespace Blueberry {
 			}
 		}
 
+	public:
+		template<typename Q>
+		Ref<Q> As() const
+		{
+			return Ref<Q>((Q*)m_Pointer);
+		}
+
 	private:
 		T* m_Pointer;
 

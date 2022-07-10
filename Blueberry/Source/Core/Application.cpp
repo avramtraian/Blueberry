@@ -7,8 +7,8 @@
 
 #include "Platform.h"
 #include "Log.h"
-#include "Filesystem/Filesystem.h"
 #include "Input.h"
+#include "Renderer/Renderer.h"
 
 #include "Time.h"
 
@@ -41,6 +41,10 @@ namespace Blueberry {
 		window_spec.Flags = WINDOW_FLAG_Maximized;
 
 		Window::Create(window_spec);
+
+		Renderer::Specification specification;
+		specification.RendererConfig.RendererAPI = Renderer::API::Vulkan;
+		Renderer::Initialize(specification);
 	}
 
 	Application::~Application()
@@ -49,6 +53,7 @@ namespace Blueberry {
 			return;
 
 		Input::Shutdown();
+		Renderer::Shutdown();
 
 		s_Instance = nullptr;
 	}
